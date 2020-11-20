@@ -1,25 +1,25 @@
 variable "application" {
-  type = String
+  type = string
 }
 
 variable "vpc_id" {
-  type = String
+  type = string
 }
 
 variable "subnets" {
-  type = String
+  type = string
 }
 
 variable "listener_port" {
-  type = String
+  type = string
 }
 
 variable "target_group_1_port" {
-  type = String
+  type = string
 }
 
 variable "target_group_2_port" {
-  type = String
+  type = string
 }
 
 resource "aws_security_group" "alb_sg" {

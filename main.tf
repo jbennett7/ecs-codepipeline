@@ -1,15 +1,15 @@
 variable "region" {
-  type = String
+  type = string
   default = "us-east-1"
 }
 
 variable "application" {
-  type = String
+  type = string
   default = "GoApplication"
 }
 
 variable "task_definition_arn" {
-  type = String
+  type = string
   default = "arn:aws:ecs:us-east-1:956263508642:task-definition/GoApp:5"
 }
 

@@ -1,9 +1,9 @@
 variable "application" {
-  type = String
+  type = string
 }
 
 variable "task_definition_arn" {
-  type = String
+  type = string
 }
 
 resource "aws_ecs_cluster" "application" {
