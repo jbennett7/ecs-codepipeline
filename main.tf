@@ -32,7 +32,7 @@ module "vpc" {
 }
 
 module "alb" {
-  source = "modules/alb"
+  source = "alb"
   application = var.application
   vpc_id = module.vpc.id
   subnets = module.vpc.public_subnets
