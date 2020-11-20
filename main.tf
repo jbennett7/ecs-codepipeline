@@ -34,7 +34,7 @@ module "vpc" {
 module "alb" {
   source = "./modules/alb"
   application = var.application
-  vpc_id = module.vpc.id
+  vpc_id = module.vpc.vpc_id
   subnets = module.vpc.public_subnets
   listener_port = "5000"
   target_group_1_port = "5000"

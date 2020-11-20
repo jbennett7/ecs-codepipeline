@@ -64,7 +64,7 @@ resource "aws_lb_target_group" "application_2" {
 }
 
 output "alb_arn" {
-  value = aws_lb.arn
+  value = aws_lb.application.arn
 }
 
 output "tg_blue_arn" {
