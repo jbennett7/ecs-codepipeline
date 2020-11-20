@@ -1,0 +1,132 @@
+---
+Description: ECS ALB
+
+Parameters:
+  EnvironmentName:
+    Description: An environment name that is prefixed to resources.
+    Type: String
+
+  ApplicationName:
+    Description: Application Name
+    Type: String
+
+  VpcStackName:
+    Description: Name of the Vpc to implement this infrastructure.
+    Type: String
+
+Resources:
+  ECSApplicationRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - ecs.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: /
+      ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AWSCodeDeployFullAccess
+      - arn:aws:iam::aws:policy/AmazonS3FullAccess
+      RoleName: GoApplicationEcsCodeDeploy
+      Description: EC2 Role for accessing CodeDeploy
+
+  ALBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: ALB security group
+      GroupName: ALBSG
+      VpcId:
+        Fn::ImportValue: !Sub "${VpcStackName}-VpcId"
+      SecurityGroupIngress:
+      - CidrIp: 0.0.0.0/0
+        Description: Port 5000
+        FromPort: 5000
+        ToPort: 5000
+        IpProtocol: tcp
+      Tags:
+      - Key: Name
+        Value: !Ref EnvironmentName
+
+  ECSSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    DependsOn: ELBSecurityGroup
+    Properties:
+      GroupDescription: Application security group
+      GroupName: AppSG
+      VpcId:
+        Fn::ImportValue: !Sub "${VpcStackName}-VpcId"
+      SecurityGroupIngress:
+      - SourceSecurityGroupId: !Ref ELBSecurityGroup
+        Description: Port 5000 Access only by ELB
+        FromPort: 5000
+        ToPort: 5000
+        IpProtocol: tcp
+      Tags:
+      - Key: Name
+        Value: !Ref EnvironmentName
+
+  TargetGroupBlue:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: !Sub "${ApplicationName}Blue"
+      TargetType: ip
+      Protocol: HTTP
+      Port: 5000
+      VpcId:
+        Fn::ImportValue: !Sub "${VpcStackName}-VpcId"
+
+  Listener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+      - Type: forward
+        TargetGroupArn: !Ref TargetGroupBlue
+      LoadBalancerArn: !Ref LoadBalancer
+      Port: 5000
+      Protocol: HTTP
+
+  LoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      IpAddressType: ipv4
+      Name: !Sub "${VpcStackName}-ELB"
+      Scheme: internet-facing
+      SecurityGroups:
+      - !Ref ALBSecurityGroup
+      Subnets: 
+        Fn::Split: 
+        - ","
+        - Fn::ImportValue:
+            !Sub "${VpcStackName}-SubnetIds"
+      Tags:
+      - Key: Name
+        Value: !Ref EnvironmentName
+      Type: application
+
+Outputs:
+  LoadBalancer:
+    Description: A reference to the Applicaton's ELB.
+    Value: !Ref LoadBalancer
+    Export: 
+      Name:
+        !Join
+        - "-"
+        - - !Ref AWS::StackName
+          - !Ref ApplicationName
+          - ElbId
+
+  DNSName:
+    Description: The AWS DNS Name.
+    Value: !GetAtt LoadBalancer.DNSName
+    Export:
+      Name:
+        !Join
+        - "-"
+        - - !Ref AWS::StackName
+          - !Ref ApplicationName
+          - DNSName
+...

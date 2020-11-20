@@ -1,0 +1,3 @@
+EnvironmentName: Test
+ApplicationName: GoApplication
+VpcStackName: DevOpsVPC
