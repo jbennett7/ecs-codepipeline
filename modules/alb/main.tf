@@ -7,7 +7,7 @@ variable "vpc_id" {
 }
 
 variable "subnets" {
-  type = string
+  type = list(string)
 }
 
 variable "listener_port" {
@@ -33,7 +33,7 @@ resource "aws_lb" "application" {
   internal = false
   load_balancer_type = "application"
   security_groups = [aws_security_group.alb_sg.id]
-  subnets = split(",", var.subnets)
+  subnets = var.subnets
   enable_deletion_protection = true
 }
 
