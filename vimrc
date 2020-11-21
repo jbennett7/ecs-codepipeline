@@ -7,5 +7,5 @@ function Status()
 endfunction
 
 function Cf_create(stack_name)
-  execute "!ssh ubuntu@terraform -C 'cd ecs-codepipeline/cloudformation;bash script/create_stack " . stack_name
+  execute "!ssh ubuntu@terraform -C 'cd ecs-codepipeline/cloudformation;bash scripts/create_stack " . a:stack_name . "'"
 endfunction
