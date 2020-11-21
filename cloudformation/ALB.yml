@@ -80,7 +80,7 @@ Outputs:
         - "-"
         - - !Ref AWS::StackName
           - !Ref ApplicationName
-          - ElbId
+          - Name
 
   DNSName:
     Description: The AWS DNS Name.

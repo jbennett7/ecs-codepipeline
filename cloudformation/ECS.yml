@@ -55,7 +55,9 @@ Resources:
       LoadBalancers:
         ContainerName: !Ref ContainerName
         ContainerPort: !Ref ContainerPort
-        LoadBalancerName:
+        LoadBalancerName: 
+          Fn::ImportValue:
+            !Sub "ALB-${ApplicationName}-Name"
         TargetGroupArn:
       LaunchType: "FARGATE"
       SchedulingStrategy: "REPLICA"
