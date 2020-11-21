@@ -10,10 +10,6 @@ Parameters:
     Description: Application Name
     Type: String
 
-  VpcStackName:
-    Description: Name of the Vpc to implement this infrastructure.
-    Type: String
-
 Resources:
   ALBSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -21,7 +17,7 @@ Resources:
       GroupDescription: ALB security group
       GroupName: ALBSG
       VpcId:
-        Fn::ImportValue: !Sub "${VpcStackName}-VpcId"
+        Fn::ImportValue: !Sub ${ApplicationName}VpcId
       SecurityGroupIngress:
       - CidrIp: 0.0.0.0/0
         Description: Port 5000
@@ -35,12 +31,12 @@ Resources:
   TargetGroupBlue:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
-      Name: !Sub "${ApplicationName}Blue"
+      Name: !Sub ${ApplicationName}Blue
       TargetType: ip
       Protocol: HTTP
       Port: 5000
       VpcId:
-        Fn::ImportValue: !Sub "${VpcStackName}-VpcId"
+        Fn::ImportValue: !Sub ${ApplicationName}VpcId
 
   Listener:
     Type: AWS::ElasticLoadBalancingV2::Listener
@@ -57,7 +53,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
       IpAddressType: ipv4
-      Name: !Sub "${VpcStackName}ALB"
+      Name: !Sub ${ApplicationName}Alb
       Scheme: internet-facing
       SecurityGroups:
       - !Ref ALBSecurityGroup
@@ -65,7 +61,7 @@ Resources:
         Fn::Split: 
         - ","
         - Fn::ImportValue:
-            !Sub "${VpcStackName}-SubnetIds"
+            !Sub ${ApplicationName}SubnetIds
       Tags:
       - Key: Name
         Value: !Ref EnvironmentName
@@ -78,10 +74,9 @@ Outputs:
     Export: 
       Name:
         !Join
-        - "-"
-        - - !Ref AWS::StackName
-          - !Ref ApplicationName
-          - Name
+        - ""
+        - - !Ref ApplicationName
+          - LoadBalancerName
 
   DNSName:
     Description: The AWS DNS Name.
@@ -89,9 +84,8 @@ Outputs:
     Export:
       Name:
         !Join
-        - "-"
-        - - !Ref AWS::StackName
-          - !Ref ApplicationName
+        - ""
+        - - !Ref ApplicationName
           - DNSName
 
   TargetGroupBlue:
@@ -100,8 +94,7 @@ Outputs:
     Export:
       Name:
         !Join
-        - "-"
-        - - !Ref AWS::StackName
-          - !Ref ApplicationName
-          - Arn
+        - ""
+        - - !Ref ApplicationName
+          - BlueTargetGroupArn
 ...

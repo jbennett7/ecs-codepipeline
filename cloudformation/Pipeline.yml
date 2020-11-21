@@ -1,0 +1,58 @@
+---
+Description: ECS Pipeline
+
+Parameters:
+  EnvironmentName:
+    Description: An environment name that is prefixed to resources.
+    Type: String
+
+  ApplicationName:
+    Description: Application Name
+    Type: String
+
+Resources:
+  CodeDeployApplication:
+    Type: AWS::CodeDeploy::Application
+    Properties:
+      ApplicationName: !Ref ApplicationName
+      ComputePlatform: "ECS"
+
+  TargetGroupGreen:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: !Sub "${ApplicationName}Green"
+      TargetType: ip
+      Protocol: HTTP
+      Port 5000
+      VpcId:
+        Fn::ImportValue: !Sub "${VpcStackName}-VpcId"
+
+  CodeDeployDeploymentGroup:
+    Type: AWS::CodeDeploy::DeploymentGroup
+    Properties:
+      ApplicationName: !Ref ApplicationName
+      AutoRollbackConfiguration:
+        Enabled: True
+        Events: "DEPLOYMENT_FAILURE"
+      DeploymentGroupName: !Sub "${ApplicationName}DeploymentGroup"
+      DeploymentStyle:
+        DeploymentOption: "WITH_TRAFFIC_CONTROL"
+        DeploymentType: "BLUE_GREEN"
+      LoadBalancerInfo:
+        ElbInfoList:
+          Name:
+            Fn::ImportValue:
+              !Sub "ALB-${ApplicationName}-Name"
+        TargetGroupInfoList:
+        - Name:
+            Fn::ImportValue:
+              !Sub "ALB-${ApplicationName}-Arn"
+        - Name: !GetAtt TargetGroupGreen.TargetGroupName
+      ServiceRoleArn: !Ref CodeDeployRole
+      EcsServices:
+        ServiceName:
+          Fn::ImportValue:
+            !Sub "ECS-${ApplicationName}-Svc"
+        ClusterName:
+          Fn::ImportValue:
+            !Sub "ECS-${ApplicationName}-Cluster"
