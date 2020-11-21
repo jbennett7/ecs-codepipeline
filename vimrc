@@ -9,3 +9,7 @@ endfunction
 function Cf_create(stack_name)
   execute "!ssh ubuntu@terraform -C 'cd ecs-codepipeline/cloudformation;bash scripts/create_stack " . a:stack_name . "'"
 endfunction
+
+function Cf_list()
+  execute "!ssh ubuntu@terraform -C 'cd ecs-codepipeline/cloudformation;bash scripts/list_stacks'"
+endfunction
