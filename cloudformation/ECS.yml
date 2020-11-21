@@ -68,7 +68,7 @@ Resources:
       PlatformVersion: "LATEST"
       NetworkConfiguration:
         AwsvpcConfiguration:
-          AssignPublicIp: "DISABLED"
+          AssignPublicIp: "ENABLED"
           SecurityGroups:
           - !Ref ECSSecurityGroup
           Subnets:

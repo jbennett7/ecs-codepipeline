@@ -13,7 +13,7 @@
   },
   {
     "ParameterKey": "ApplicationTaskDefinition",
-    "ParameterValue": "arn:aws:ecs:us-east-1:956263508642:task-definition/GoApp:5"
+    "ParameterValue": "arn:aws:ecs:us-east-1:956263508642:task-definition/GoApp:6"
   },
   {
     "ParameterKey": "ContainerName",
