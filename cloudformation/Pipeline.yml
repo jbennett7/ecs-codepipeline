@@ -23,7 +23,7 @@ Resources:
       Name: !Sub ${ApplicationName}Green
       TargetType: ip
       Protocol: HTTP
-      Port 5000
+      Port: 5000
       VpcId:
         Fn::ImportValue: !Sub ${VpcStackName}VpcId
 
