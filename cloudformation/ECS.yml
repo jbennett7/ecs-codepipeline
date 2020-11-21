@@ -22,6 +22,9 @@ Parameters:
     Description: Application Container Name
     Type: String
 
+  ContainerPort:
+    Description: Application Container Port
+    Type: String
 
 Resources:
   ECSSecurityGroup:
@@ -51,7 +54,7 @@ Resources:
     Properties:
       Cluster: !GetAtt ECSCluster.Arn
       ServiceName: !Sub "${ApplicationName}EcsService"
-      TaskDefinition: !Ref TaskDefinition
+      TaskDefinition: !Ref ApplicationTaskDefinition
       LoadBalancers:
         ContainerName: !Ref ContainerName
         ContainerPort: !Ref ContainerPort
