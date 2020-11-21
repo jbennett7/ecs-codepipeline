@@ -21,6 +21,6 @@
   },
   {
     "ParameterKey": "ContainerPort",
-    "ParameterValue": "GoApp"
+    "ParameterValue": "5000"
   }
 ]
