@@ -24,8 +24,3 @@ function Cf_update(stack_name)
   let l:cmd = "cd cloudformation;bash scripts/update_stack "
   execute s:env . l:cmd . a:stack_name . "'"
 endfunction
-
-function Cf_mcreate(stacks)
-  let l:cmd = "cd cloudformation;bash scripts/create_stacks "
-  execute s:env . l:cmd . a:stacks . "'"
-endfunction
