@@ -11,6 +11,23 @@ Parameters:
     Type: String
 
 Resources:
+  CodeDeployRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+        - Sid: ""
+          Effect: Allow
+          Principal:
+            Service:
+            - codedeploy.amazonaws.com
+          Action: sts:AssumeRole
+      Description: ECS CodeDeploy Role.
+      ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AWSCodeDeployRoleForECS
+      RoleName: ecsCodeDeployRole
+
   CodeDeployApplication:
     Type: AWS::CodeDeploy::Application
     Properties:
