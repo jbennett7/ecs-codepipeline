@@ -73,7 +73,7 @@ Resources:
 Outputs:
   LoadBalancer:
     Description: A reference to the Applicaton's ALB.
-    Value: !Ref LoadBalancer.Name
+    Value: !GetAtt LoadBalancer.Name
     Export: 
       Name:
         !Join
