@@ -44,6 +44,7 @@ Resources:
 
   Listener:
     Type: AWS::ElasticLoadBalancingV2::Listener
+    DependsOn: TargetGroupBlue
     Properties:
       DefaultActions:
       - Type: forward
