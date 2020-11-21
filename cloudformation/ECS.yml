@@ -59,6 +59,8 @@ Resources:
           Fn::ImportValue:
             !Sub "ALB-${ApplicationName}-Name"
         TargetGroupArn:
+          Fn::ImportValue:
+            !Sub "ALB-${ApplicationName}-Arn"
       LaunchType: "FARGATE"
       SchedulingStrategy: "REPLICA"
       DeploymentController:
