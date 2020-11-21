@@ -1,0 +1,74 @@
+---
+Description: ECS Cluster
+
+Parameters:
+  EnvironmentName:
+    Description: An environment name that is prefixed to resources.
+    Type: String
+
+  ApplicationName:
+    Description: Application Name
+    Type: String
+
+  VpcStackName:
+    Description: Name of the Vpc to implement this in.
+    Type: String
+
+  ApplicationTaskDefinition:
+    Description: Application Task Definition
+    Type: String
+
+  ContainerName:
+    Description: Application Container Name
+    Type: String
+
+
+Resources:
+  ECSSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: ECS security group
+      GroupName: ECSSG
+      VpcId:
+        Fn::ImportValue: !Sub "${VpcStackName}-VpcId"
+      SecurityGroupIngress:
+      - CidrIp: 0.0.0.0/0
+        Description: Port 5000
+        FromPort: 5000
+        ToPort: 5000
+        IpProtocol: tcp
+      Tags:
+      - Key: Name
+        Value: !Ref EnvironmentName
+
+  ECSCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: !Sub "${ApplicationName}EcsCluster"
+
+  ECSService:
+    Type: AWS::ECS::Service
+    Properties:
+      Cluster: !GetAtt ECSCluster.Arn
+      ServiceName: !Sub "${ApplicationName}EcsService"
+      TaskDefinition: !Ref TaskDefinition
+      LoadBalancers:
+        ContainerName:
+        ContainerPort:
+        LoadBalancerName:
+        TargetGroupArn:
+      LaunchType: "FARGATE"
+      SchedulingStrategy: "REPLICA"
+      DeploymentController:
+        Type: "CODE_DEPLOY"
+      PlatformVersion: "LATEST"
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: False
+          SecurityGroups: !Ref ECSSecurityGroup
+          Subnets:
+            Fn::Split:
+            - ","
+            - Fn::ImportValue:
+                !Sub "${VpcStackName}-SubnetIds"
+     DesiredCount: 1

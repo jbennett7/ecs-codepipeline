@@ -1,0 +1,22 @@
+[
+  {
+    "ParameterKey": "EnvironmentName",
+    "ParameterValue": "Test"
+  },
+  {
+    "ParameterKey": "ApplicationName",
+    "ParameterValue": "GoApplication"
+  },
+  {
+    "ParameterKey": "VpcStackName",
+    "ParameterValue": "DevOpsVPC"
+  },
+  {
+    "ParameterKey": "ApplicationTaskDefinition",
+    "ParameterValue": "arn:aws:ecs:us-east-1:956263508642:task-definition/GoApp:5"
+  },
+  {
+    "ParameterKey": "ContainerName",
+    "ParameterValue": "GoApp"
+  }
+]

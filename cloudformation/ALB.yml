@@ -15,25 +15,6 @@ Parameters:
     Type: String
 
 Resources:
-  ECSApplicationRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: 2012-10-17
-        Statement:
-        - Effect: Allow
-          Principal:
-            Service:
-            - ecs.amazonaws.com
-          Action:
-          - sts:AssumeRole
-      Path: /
-      ManagedPolicyArns:
-      - arn:aws:iam::aws:policy/AWSCodeDeployFullAccess
-      - arn:aws:iam::aws:policy/AmazonS3FullAccess
-      RoleName: GoApplicationEcsCodeDeploy
-      Description: EC2 Role for accessing CodeDeploy
-
   ALBSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -44,24 +25,6 @@ Resources:
       SecurityGroupIngress:
       - CidrIp: 0.0.0.0/0
         Description: Port 5000
-        FromPort: 5000
-        ToPort: 5000
-        IpProtocol: tcp
-      Tags:
-      - Key: Name
-        Value: !Ref EnvironmentName
-
-  ECSSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    DependsOn: ALBSecurityGroup
-    Properties:
-      GroupDescription: Application security group
-      GroupName: AppSG
-      VpcId:
-        Fn::ImportValue: !Sub "${VpcStackName}-VpcId"
-      SecurityGroupIngress:
-      - SourceSecurityGroupId: !Ref ALBSecurityGroup
-        Description: Port 5000 Access only by ALB
         FromPort: 5000
         ToPort: 5000
         IpProtocol: tcp
