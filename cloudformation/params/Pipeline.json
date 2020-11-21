@@ -1,0 +1,10 @@
+[
+  {
+    "ParameterKey": "EnvironmentName",
+    "ParameterValue": "Test"
+  },
+  {
+    "ParameterKey": "ApplicationName",
+    "ParameterValue": "GoApplication"
+  }
+]
