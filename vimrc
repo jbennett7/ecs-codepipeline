@@ -19,3 +19,8 @@ function Cf_delete(stack_name)
   let l:cmd = "cd cloudformation;bash scripts/delete_stack "
   execute s:env . l:cmd . a:stack_name . "'"
 endfunction
+
+function Cf_update(stack_name)
+  let l:cmd = "cd cloudformation;bash scripts/update_stack "
+  execute s:env . l:cmd . a:stack_name . "'"
+endfunction

@@ -53,8 +53,8 @@ Resources:
       ServiceName: !Sub "${ApplicationName}EcsService"
       TaskDefinition: !Ref TaskDefinition
       LoadBalancers:
-        ContainerName:
-        ContainerPort:
+        ContainerName: !Ref ContainerName
+        ContainerPort: !Ref ContainerPort
         LoadBalancerName:
         TargetGroupArn:
       LaunchType: "FARGATE"

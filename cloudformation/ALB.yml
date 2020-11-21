@@ -73,7 +73,7 @@ Resources:
 Outputs:
   LoadBalancer:
     Description: A reference to the Applicaton's ALB.
-    Value: !Ref LoadBalancer
+    Value: !Ref LoadBalancer.Name
     Export: 
       Name:
         !Join
@@ -92,4 +92,15 @@ Outputs:
         - - !Ref AWS::StackName
           - !Ref ApplicationName
           - DNSName
+
+  TargetGroupBlue:
+    Description: Blue Target Group
+    Value: !GetAtt TargetGroupBlue.Arn
+    Export:
+      Name:
+        !Join
+        - "-"
+        - - !Ref AWS::StackName
+        - - !Ref ApplicationName
+        - - Arn
 ...
