@@ -58,9 +58,6 @@ Resources:
       LoadBalancers:
       - ContainerName: !Ref ContainerName
         ContainerPort: !Ref ContainerPort
-        LoadBalancerName: 
-          Fn::ImportValue:
-            !Sub "ALB-${ApplicationName}-Name"
         TargetGroupArn:
           Fn::ImportValue:
             !Sub "ALB-${ApplicationName}-Arn"
