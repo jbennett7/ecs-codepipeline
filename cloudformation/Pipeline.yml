@@ -42,7 +42,7 @@ Resources:
       Protocol: HTTP
       Port: 5000
       VpcId:
-        Fn::ImportValue: !Sub ${VpcStackName}VpcId
+        Fn::ImportValue: !Sub ${ApplicationName}VpcId
 
   CodeDeployDeploymentGroup:
     Type: AWS::CodeDeploy::DeploymentGroup
@@ -58,18 +58,14 @@ Resources:
       LoadBalancerInfo:
         ElbInfoList:
           Name:
-            Fn::ImportValue: GoApplicationLoadBalancerName
-#           Fn::ImportValue: !Sub ${ApplicationName}LoadBalancerName
+            Fn::ImportValue: !Sub ${ApplicationName}LoadBalancerName
         TargetGroupInfoList:
         - Name:
-            Fn::ImportValue: GoApplicationBlueTargetGroupArn
-#           Fn::ImportValue: !Sub ${ApplicationName}BlueTargetGroupArn
+            Fn::ImportValue: !Sub ${ApplicationName}BlueTargetGroupArn
         - Name: !GetAtt TargetGroupGreen.TargetGroupName
       ServiceRoleArn: !Ref CodeDeployRole
       EcsServices:
         ServiceName:
-          Fn::ImportValue: GoApplicationEcsServiceName
-#         Fn::ImportValue: !Sub ${ApplicationName}EcsServiceName
+          Fn::ImportValue: !Sub ${ApplicationName}EcsServiceName
         ClusterName:
-          Fn::ImportValue: GoApplicationEcsClusterName
-#         Fn::ImportValue: !Sub ${ApplicationName}EcsClusterName
+          Fn::ImportValue: !Sub ${ApplicationName}EcsClusterName
