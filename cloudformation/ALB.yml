@@ -60,7 +60,7 @@ Resources:
       VpcId:
         Fn::ImportValue: !Sub "${VpcStackName}-VpcId"
       SecurityGroupIngress:
-      - SourceSecurityGroupId: !Ref ELBSecurityGroup
+      - SourceSecurityGroupId: !Ref ALBSecurityGroup
         Description: Port 5000 Access only by ELB
         FromPort: 5000
         ToPort: 5000
