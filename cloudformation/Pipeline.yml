@@ -58,14 +58,18 @@ Resources:
       LoadBalancerInfo:
         ElbInfoList:
           Name:
-            Fn::ImportValue: !Sub ${ApplicationName}LoadBalancerName
+            Fn::ImportValue: GoApplicationLoadBalancerName
+#           Fn::ImportValue: !Sub ${ApplicationName}LoadBalancerName
         TargetGroupInfoList:
         - Name:
-            Fn::ImportValue: !Sub ${ApplicationName}BlueTargetGroupArn
+            Fn::ImportValue: GoApplicationBlueTargetGroupArn
+#           Fn::ImportValue: !Sub ${ApplicationName}BlueTargetGroupArn
         - Name: !GetAtt TargetGroupGreen.TargetGroupName
       ServiceRoleArn: !Ref CodeDeployRole
       EcsServices:
         ServiceName:
-          Fn::ImportValue: !Sub ${ApplicationName}EcsServiceName
+          Fn::ImportValue: GoApplicationEcsServiceName
+#         Fn::ImportValue: !Sub ${ApplicationName}EcsServiceName
         ClusterName:
-          Fn::ImportValue: !Sub ${ApplicationName}EcsClusterName
+          Fn::ImportValue: GoApplicationEcsClusterName
+#         Fn::ImportValue: !Sub ${ApplicationName}EcsClusterName
