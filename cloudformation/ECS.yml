@@ -56,7 +56,7 @@ Resources:
       ServiceName: !Sub "${ApplicationName}EcsService"
       TaskDefinition: !Ref ApplicationTaskDefinition
       LoadBalancers:
-        ContainerName: !Ref ContainerName
+      - ContainerName: !Ref ContainerName
         ContainerPort: !Ref ContainerPort
         LoadBalancerName: 
           Fn::ImportValue:
@@ -71,8 +71,9 @@ Resources:
       PlatformVersion: "LATEST"
       NetworkConfiguration:
         AwsvpcConfiguration:
-          AssignPublicIp: False
-          SecurityGroups: !Ref ECSSecurityGroup
+          AssignPublicIp: "DISABLED"
+          SecurityGroups:
+          - !Ref ECSSecurityGroup
           Subnets:
             Fn::Split:
             - ","
