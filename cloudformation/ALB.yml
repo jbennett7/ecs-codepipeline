@@ -101,6 +101,6 @@ Outputs:
         !Join
         - "-"
         - - !Ref AWS::StackName
-        - - !Ref ApplicationName
-        - - Arn
+          - !Ref ApplicationName
+          - Arn
 ...
