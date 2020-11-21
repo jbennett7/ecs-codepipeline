@@ -53,7 +53,7 @@ Resources:
 
   ECSSecurityGroup:
     Type: AWS::EC2::SecurityGroup
-    DependsOn: ELBSecurityGroup
+    DependsOn: ALBSecurityGroup
     Properties:
       GroupDescription: Application security group
       GroupName: AppSG
