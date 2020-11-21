@@ -8,10 +8,6 @@
     "ParameterValue": "GoApplication"
   },
   {
-    "ParameterKey": "VpcStackName",
-    "ParameterValue": "PublicVpc"
-  },
-  {
     "ParameterKey": "ApplicationTaskDefinition",
     "ParameterValue": "arn:aws:ecs:us-east-1:956263508642:task-definition/GoApp:6"
   },

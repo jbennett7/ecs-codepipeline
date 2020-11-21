@@ -5,6 +5,6 @@
     },
     {
         "ParameterKey": "ApplicationName",
-        "ParameterValue": "GoApp"
+        "ParameterValue": "GoApplication"
     }
 ]

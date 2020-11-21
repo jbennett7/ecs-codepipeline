@@ -6,9 +6,5 @@
   {
     "ParameterKey": "ApplicationName",
     "ParameterValue": "GoApplication"
-  },
-  {
-    "ParameterKey": "VpcStackName",
-    "ParameterValue": "PublicVpc"
   }
 ]

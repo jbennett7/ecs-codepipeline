@@ -6,6 +6,10 @@ Parameters:
     Description: An environment name that is prefixed to resources.
     Type: String
 
+  ApplicationName:
+    Description: Application Name
+    Type: String
+
   VpcCIDR:
     Description: The IP range (CIDR notation) for this VPC.
     Type: String
@@ -54,7 +58,10 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      AvailabilityZone:
+        !Select 
+        - 0
+        - !GetAZs ''
       CidrBlock: !Ref PublicSubnet1CIDR
       MapPublicIpOnLaunch: true
       Tags:
@@ -65,7 +72,10 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 1, !GetAZs '' ]
+      AvailabilityZone:
+        !Select
+        - 1
+        - !GetAZs ''
       CidrBlock: !Ref PublicSubnet2CIDR
       MapPublicIpOnLaunch: true
       Tags:
@@ -76,7 +86,10 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 2, !GetAZs '' ]
+      AvailabilityZone:
+        !Select
+        - 2
+        - !GetAZs ''
       CidrBlock: !Ref PublicSubnet3CIDR
       MapPublicIpOnLaunch: true
       Tags:
@@ -121,31 +134,25 @@ Outputs:
   VPC:
     Description: A reference to the VPC.
     Value: !Ref VPC
-    Export: { Name: !Join [ "-", [ !Ref AWS::StackName, VpcId ] ] }
-
-#  AvailabilityZones:
-#   Description: Availability Zones for this VPC.
-#    Value: !Join [ ",", [
-#        !GetAtt PublicSubnet1.AvailabilityZone,
-#        !GetAtt PublicSubnet2.AvailabilityZone,
-#        !GetAtt PublicSubnet3.AvailabilityZone
-#    ]]
-#    Export: { Name: !Join [ "-", [ !Ref AWS::StackName, Azs ] ] }
+    Export: 
+      Name:
+        !Join 
+        - ""
+        - - !Ref ApplicationName
+          - VpcId
 
   PublicSubnets:
     Description: A list of the public subnets
-    Value: !Join [ ",", [ !Ref PublicSubnet1, !Ref PublicSubnet2, !Ref PublicSubnet3 ]]
-    Export: { Name: !Join [ "-", [ !Ref AWS::StackName, SubnetIds ] ] }
-
-  PublicSubnet1:
-    Description: A reference to the first public subnet.
-    Value: !Ref PublicSubnet1
-
-  PublicSubnet2:
-    Description: A reference to the first public subnet.
-    Value: !Ref PublicSubnet2
-
-  PublicSubnet3:
-    Description: A reference to the first public subnet.
-    Value: !Ref PublicSubnet3
+    Value:
+      !Join 
+      - ","
+      - - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+        - !Ref PublicSubnet3
+    Export:
+      Name:
+        !Join
+        - ""
+        - - !Ref ApplicationName
+          - SubnetIds
 ...
