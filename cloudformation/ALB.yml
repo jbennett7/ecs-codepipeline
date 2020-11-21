@@ -95,7 +95,7 @@ Outputs:
 
   TargetGroupBlue:
     Description: Blue Target Group
-    Value: !GetAtt TargetGroupBlue.Arn
+    Value: !Ref TargetGroupBlue
     Export:
       Name:
         !Join
