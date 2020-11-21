@@ -9,7 +9,7 @@
   },
   {
     "ParameterKey": "VpcStackName",
-    "ParameterValue": "DevOpsVPC"
+    "ParameterValue": "PublicVpc"
   },
   {
     "ParameterKey": "ApplicationTaskDefinition",

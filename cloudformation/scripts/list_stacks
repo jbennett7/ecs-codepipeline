@@ -1,4 +1,6 @@
 #!/bin/sh
 
 aws cloudformation list-stacks \
-  --query "StackSummaries[?(StackStatus == 'CREATE_COMPLETE' || StackStatus == 'UPDATE_COMPLETE')]"
+  --query "StackSummaries[?(StackStatus == 'CREATE_COMPLETE' ||
+      StackStatus == 'UPDATE_COMPLETE' ||
+      StackStatus == 'CREATE_IN_PROGRESS')]"
