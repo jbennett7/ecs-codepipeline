@@ -61,7 +61,7 @@ Resources:
         Fn::ImportValue: !Sub "${VpcStackName}-VpcId"
       SecurityGroupIngress:
       - SourceSecurityGroupId: !Ref ALBSecurityGroup
-        Description: Port 5000 Access only by ELB
+        Description: Port 5000 Access only by ALB
         FromPort: 5000
         ToPort: 5000
         IpProtocol: tcp
@@ -93,7 +93,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
       IpAddressType: ipv4
-      Name: !Sub "${VpcStackName}-ELB"
+      Name: !Sub "${VpcStackName}ALB"
       Scheme: internet-facing
       SecurityGroups:
       - !Ref ALBSecurityGroup
@@ -109,7 +109,7 @@ Resources:
 
 Outputs:
   LoadBalancer:
-    Description: A reference to the Applicaton's ELB.
+    Description: A reference to the Applicaton's ALB.
     Value: !Ref LoadBalancer
     Export: 
       Name:
