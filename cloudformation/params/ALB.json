@@ -1,14 +1,14 @@
 [
   {
     "ParameterKey": "EnvironmentName",
-    "ParamaeterValue": "Test"
+    "ParameterValue": "Test"
   },
   {
     "ParameterKey": "ApplicationName",
-    "ParamaeterValue": "GoApplication"
+    "ParameterValue": "GoApplication"
   },
   {
     "ParameterKey": "VpcStackName",
-    "ParamaeterValue": "DevOpsVPC"
+    "ParameterValue": "DevOpsVPC"
   }
 ]
