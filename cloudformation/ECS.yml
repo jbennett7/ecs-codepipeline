@@ -74,7 +74,7 @@ Resources:
                 !Sub ${ApplicationName}SubnetIds
       DesiredCount: 1
 
-Output:
+Outputs:
   EcsClusterName:
     Description: Application ECS Cluster.
     Value: !Ref ECSCluster
