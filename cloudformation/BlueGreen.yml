@@ -194,7 +194,7 @@ Resources:
       Name: !Sub ${ApplicationName}Alb
       Scheme: internet-facing
       SecurityGroups:
-      - !Ref ALBSecurityGroup
+      - !Ref AlbSecurityGroup
       Subnets: 
         Fn::Split: 
         - ","
