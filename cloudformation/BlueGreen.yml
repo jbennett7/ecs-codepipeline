@@ -23,7 +23,7 @@ Transform:
 - AWS::CodeDeployBlueGreen
 
 Hooks:
-  CodeDeployBlooGreenHook:
+  CodeDeployBlueGreenHook:
     Type: AWS::CodeDeploy::BlueGreen
     Properties:
       TrafficRoutingConfig:
