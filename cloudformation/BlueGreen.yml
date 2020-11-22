@@ -246,16 +246,16 @@ Resources:
         Subnets:
         - !Ref PublicSubnet1
         - !Ref PublicSubnet2
-    PlatformVersion: 1.3.0
-    Scale:
-      Unit: PERCENT
-      Value: 1
-    Service: !Ref EcsService
-    TaskDefinition: !Ref BlueTaskDefinition
-    LoadBalancers:
-    - ContainerName: !Ref ${ApplicationName}
-      ContainerPort: 5000
-      TargetGroupArn: !Ref TargetGroupBlue
+      PlatformVersion: 1.3.0
+      Scale:
+        Unit: PERCENT
+        Value: 1
+      Service: !Ref EcsService
+      TaskDefinition: !Ref BlueTaskDefinition
+      LoadBalancers:
+      - ContainerName: !Ref ${ApplicationName}
+        ContainerPort: 5000
+        TargetGroupArn: !Ref TargetGroupBlue
 
   PrimaryTaskSet:
     Type: AWS::ECS::PrimaryTaskSet
