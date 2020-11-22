@@ -20,10 +20,8 @@ Then, if you initiate a stack update that updates any properties of the above re
 In many cases, you'll want to set up your stack template to enable blue/green deployments _before_ you create the stack. However, you can also add the ability to have CloudFormation perform blue/green deployments to an existing stack. To do so, add the necessary information to the stack's existing template.
 
 In addition, we recommend you have CloudFormation generate a [change set](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html) for the green deployment, prior to initiating the stack update. This enables you to review the actual changes that will be made to the stack.
-***
 ### Modeling your blue/green deployment using CloudFormation resources
 In order to perform ECS blue/green deployment using CodeDeploy through CloudFormation, your template needs to include the resources that model your deployment, such as an Amazon ECS service and load balancer. For more details on what these resources represent, see [Before you begin an Amazon ECS deployment](https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-steps-ecs.html#deployment-steps-prerequisites-ecs) in the _AWS CodeDeploy User Guide_.
-
 | Requirement                               | Resource                                            | Required/Optional                         | Triggers blue/green deployment if replaced |
 |-------------------------------------------|-----------------------------------------------------|-------------------------------------------|--------------------------------------------|
 | Amazon ECS Cluster                        | [AWS::ECS::Cluster](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-cluster.html)                                   | Optional. The default cluster can be used | No                                         |
