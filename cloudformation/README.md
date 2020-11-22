@@ -33,7 +33,6 @@ In order to perform ECS blue/green deployment using CodeDeploy through CloudForm
 | Amazon ECS Task Definition                | [AWS::ECS::TaskDefinition](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html)                            | Required                                  | Yes                                        |
 | Container for your Amazon ECS application | [AWS::ECS::TaskDefinition Container Definition Name](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-taskdefinition-containerdefinitions.html#cfn-ecs-taskdefinition-containerdefinition-name.html)  | Required                                  | No                                         |
 | Port for your replacement task set        | [AWS::ECS::TaskDefinition PortMapping Container Port](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-taskdefinition-containerdefinitions-portmappings.html#cfn-ecs-taskdefinition-containerdefinition-portmappings-containerport.html) | Required                                  | No                                         |
-***
 ### Resource updates that trigger green deployments
 If you perform a stack update that updates any property that requires [replacement](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html) for the followign ECS resources, CloudFormation inititates a green deployment:
   * [AWS::ECS::TaskDefinition](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html)
@@ -44,6 +43,20 @@ Updating properties in these resources that do not require resource replacement 
 You cannot include updates to the above resources with updates to other resources in the same stack update. If you need to update resources in the list above as well as other resources in the same stack, do one of the following:
   * Perform two seperate stack update operations: one that includes only the updates to the above resources, and a separate stack update that includes changes to any other resources.
   * Remove the `Transform` and `Hook` sections from your template and then perform the stack update. In this case, CloudFormation will not perform a green deployment.
-***
 ### Considerations when managing ECS blue/green deployments using CloudFormation
+You should consider the following when defining your blue/green deployment using CloudFormation:
+  * Only updates to certain resources will trigger a green deployment, as discussed in [Resource updates that trigger ECS blue/green deployments](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/blue-green.html#blue-green-resources).
+  * You cannot include updates to resources that trigger green deployments and updtes to other resources in the same stack update, as discussed in [Resource updates that trigger ECS blue/green deployments](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/blue-green.html#blue-green-resources).
+  * You can only specify a single ECS service as the deployment target.
+  * Parameters whose values are obfuscated by CloudFormation cannot be updated by the CodeDeploy service during a green deployment, and will lead to an error and stack update failure. These include:
+    - Parameters defined with the `NoEcho` attribute.
+    - Parameters that use dynamic references to retrieve their values from external services. For more information, see [Using dynamic references to specify template values](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/dynamic-references.html).
+  * To cancel a green deployment that is still in progress, cancel the stack update in CloudFormation, not CodeDeploy or ECS. For more information, see [Canceling a stack update](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn--stack-update-cancel.html). (After an update has finished, you cannot cancel it. You can, however, update a stack again with any previous settings.)
+  * Declaring [output values](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/outputs-section-structure.html) or [importing values](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html) from other stacks is not currently supported for templates defining blue/green ECS deployments.
+  * [Importing existing resources](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resource-import.html) is not currently supported for templates defining blue/green ECS deployments.
+  * You cannot use the `AWS::CodeDeploy::BlueGreen` hook in a template that includes nested stack resources.
+  * You cannot use the `AWS::CodeDeploy::BlueGreen` hook in a [nested stack](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-nested-stacks.html).
+
+For information on how using CloudFormation to perform your ECS blue/green deployments through CodeDeploy differs from a standard Amazon ECS deployment using just CodeDeploy, see [Differences between Amazon ECS Blue/Green deployments through AWS CloudFormation and standard Amazon ECS deployments](https://docs.aws.amazon.com/codedeploy/latest/userguide/deployments-create-prerequisites.html) in the _AWS CodeDeploy User Guide_.
+### Preparing your template to perform ECS blue/green deployments
 
