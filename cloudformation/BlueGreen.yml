@@ -34,7 +34,7 @@ Hooks:
       Applications:
       - Target:
           Type: AWS::ECS::Service
-          LogicalID: ECSDemoService
+          LogicalID: EcsService
         ECSAttributes:
           TaskDefinitions:
           - BlueTaskDefinition
