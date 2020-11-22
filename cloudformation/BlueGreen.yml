@@ -262,4 +262,4 @@ Resources:
     Properties:
       Cluster: !Ref EcsCluster
       Service: !Ref EcsService
-    TaskSetId: !GetAtt BlueTaskSet.Id
+      TaskSetId: !GetAtt BlueTaskSet.Id
