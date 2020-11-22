@@ -187,6 +187,7 @@ Resources:
           Values:
           - Mozilla
       ListenerArn: !Ref Listener
+      Priority: 1
 
   LoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
