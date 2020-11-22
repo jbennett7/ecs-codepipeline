@@ -1,5 +1,5 @@
-# CloudFormation scripts
-## Performing ECS blue/green deployment through CodeDeploy using AWS CloudFormation.
+# Performing ECS blue/green deployment through CodeDeploy using AWS CloudFormation.
+***
 You can use CloudFormation to perform ECS blue/green deployments through CodeDeploy. Blue/green deployments are a safe deployment strategy provided by AWS CodeDeploy for minimizing interruptions caused by changing application versions. This is accomplished by creating your new application environment, referred to as _green_, alongside your current application that is serving your live traffic, referred to as _blue_. This allows for a period of time for monitoring and testing of the green environment before your live traffic is routed from blue to green and subsequently turning off the blue resources.
 
 When using CloudFormation to perform ECS blue/green deployments, you start by creating a stack template that defines the resources for both your blue and green application environments, including specifying the traffic routing and stabilization settings to use. Next, you create a stack from that template; this generates your blue (current) application. CloudFormation only creates the blue resources during stack creation. Resources for a green deployment are not created until they are required.
@@ -20,7 +20,8 @@ Then, if you initiate a stack update that updates any properties of the above re
 In many cases, you'll want to set up your stack template to enable blue/green deployments _before_ you create the stack. However, you can also add the ability to have CloudFormation perform blue/green deployments to an existing stack. To do so, add the necessary information to the stack's existing template.
 
 In addition, we recommend you have CloudFormation generate a [change set](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html) for the green deployment, prior to initiating the stack update. This enables you to review the actual changes that will be made to the stack.
-### Modeling your blue/green deployment using CloudFormation resources
+---
+## Modeling your blue/green deployment using CloudFormation resources
 In order to perform ECS blue/green deployment using CodeDeploy through CloudFormation, your template needs to include the resources that model your deployment, such as an Amazon ECS service and load balancer. For more details on what these resources represent, see [Before you begin an Amazon ECS deployment](https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-steps-ecs.html#deployment-steps-prerequisites-ecs) in the _AWS CodeDeploy User Guide_.
 | Requirement                               | Resource                                            | Required/Optional                         | Triggers blue/green deployment if replaced |
 |-------------------------------------------|-----------------------------------------------------|-------------------------------------------|--------------------------------------------|
