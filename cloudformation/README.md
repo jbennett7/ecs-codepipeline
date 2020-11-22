@@ -1,5 +1,4 @@
 # CloudFormation scripts
-
 ## Performing ECS blue/green deployment through CodeDeploy using AWS CloudFormation.
 You can use CloudFormation to perform ECS blue/green deployments through CodeDeploy. Blue/green deployments are a safe deployment strategy provided by AWS CodeDeploy for minimizing interruptions caused by changing application versions. This is accomplished by creating your new application environment, referred to as _green_, alongside your current application that is serving your live traffic, referred to as _blue_. This allows for a period of time for monitoring and testing of the green environment before your live traffic is routed from blue to green and subsequently turning off the blue resources.
 
