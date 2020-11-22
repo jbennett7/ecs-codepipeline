@@ -64,8 +64,8 @@ Resources:
             Fn::ImportValue: !Sub ${ApplicationName}BlueTargetGroupArn
         - Name: !GetAtt TargetGroupGreen.TargetGroupName
       ServiceRoleArn: !Ref CodeDeployRole
-      EcsServices:
-        ServiceName:
-          Fn::ImportValue: !Sub ${ApplicationName}EcsServiceName
-        ClusterName:
-          Fn::ImportValue: !Sub ${ApplicationName}EcsClusterName
+#     EcsServices:
+#       ServiceName:
+#         Fn::ImportValue: !Sub ${ApplicationName}EcsServiceName
+#       ClusterName:
+#         Fn::ImportValue: !Sub ${ApplicationName}EcsClusterName
