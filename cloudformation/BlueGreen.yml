@@ -200,9 +200,6 @@ Resources:
         - ","
         - Fn::ImportValue:
             !Sub ${ApplicationName}SubnetIds
-      Tags:
-      - Key: Name
-        Value: !Ref EnvironmentName
       Type: application
 
   EcsTaskExecutionRole:
