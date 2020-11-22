@@ -185,7 +185,7 @@ Resources:
           HttpHeaderName: User-Agent
           Values:
           - Mozilla
-      ListenerArn: !Ref 
+      ListenerArn: !Ref Listener
 
   LoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
