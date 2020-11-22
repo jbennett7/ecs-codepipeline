@@ -187,6 +187,24 @@ Resources:
           - Mozilla
       ListenerArn: !Ref 
 
+  LoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      IpAddressType: ipv4
+      Name: !Sub ${ApplicationName}Alb
+      Scheme: internet-facing
+      SecurityGroups:
+      - !Ref ALBSecurityGroup
+      Subnets: 
+        Fn::Split: 
+        - ","
+        - Fn::ImportValue:
+            !Sub ${ApplicationName}SubnetIds
+      Tags:
+      - Key: Name
+        Value: !Ref EnvironmentName
+      Type: application
+
   EcsTaskExecutionRole:
     Type: AWS::IAM::Role
     Properties:
