@@ -271,7 +271,7 @@ Resources:
       Service: !Ref EcsService
       TaskDefinition: !Ref BlueTaskDefinition
       LoadBalancers:
-      - ContainerName: !Ref ${ApplicationName}
+      - ContainerName: !Sub ${ApplicationName}
         ContainerPort: 5000
         TargetGroupArn: !Ref TargetGroupBlue
 
