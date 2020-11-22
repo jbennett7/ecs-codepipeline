@@ -45,10 +45,10 @@ Hooks:
           TrafficRouting:
             ProdTrafficRoute:
               Type: AWS::ElasticLoadBalancingV2::Listener
-              LogicalID: ALBListenerProdTraffic
+              LogicalID: Listener
             TargetGroups:
-            - ALBTargetGroupBlue
-            - ALBTargetGroupGreen
+            - TargetGroupBlue
+            - TargetGroupGreen
 
 Resources:
   Vpc:
