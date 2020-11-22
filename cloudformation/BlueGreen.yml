@@ -257,9 +257,9 @@ Resources:
           AssignPublicIp: ENABLED
           SecurityGroups:
           - !Ref EcsSecurityGroup
-        Subnets:
-        - !Ref PublicSubnet1
-        - !Ref PublicSubnet2
+          Subnets:
+          - !Ref PublicSubnet1
+          - !Ref PublicSubnet2
       PlatformVersion: 1.3.0
       Scale:
         Unit: PERCENT
