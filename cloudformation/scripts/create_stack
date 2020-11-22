@@ -4,4 +4,4 @@ aws cloudformation create-stack \
   --stack-name ${1} \
   --template-body file://${1}.yml \
   --parameters file://params/${1}.json \
-  --capabilities CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND
+  --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND
