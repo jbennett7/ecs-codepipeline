@@ -1,5 +1,5 @@
 ---
-Description: ECS ALB
+Description: ECS Application Load Balancer.
 
 Parameters:
   EnvironmentName:
