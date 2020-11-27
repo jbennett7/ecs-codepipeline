@@ -4,6 +4,20 @@ function Update()
   let l:cmd = "git pull"
   execute s:env . l:cmd . "'"
 endfunction
+command! -nargs=0 -complete=command Update call Update()
+
+function UpdateAll(msg)
+  if empty(a:msg)
+    let l:msg = "changes"
+  else
+    let l:msg = a:msg
+  endif
+  execute "!git add " . expand("%")
+  call GitCommit(l:msg)
+  execute "!git push origin master"
+  call Update()
+endfunction
+command! -nargs=* -complete=command UpdateAll call UpdateAll(<q-args>)
 
 function Cf_create(stack_name)
   let l:cmd = "cd cloudformation;bash scripts/create_stack "
