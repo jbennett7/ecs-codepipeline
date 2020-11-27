@@ -244,7 +244,7 @@ Resources:
     Type: AWS::ECS::Service
     Properties:
       Cluster: !GetAtt EcsCluster.Arn
-      DesiredCount: 1
+      DesiredCount: 6
       DeploymentController:
         Type: EXTERNAL
 
