@@ -313,7 +313,7 @@ Resources:
       ExecutionRoleArn: !GetAtt EcsTaskExecutionRole.Arn
       ContainerDefinitions:
       - Name: !Sub ${ApplicationName}
-        Image: 956263508642.dkr.ecr.us-east-1.amazonaws.com/projecta/gohello:latest
+        Image: !Sub ${AWS::AccountId}.dkr.ecr.us-east-1.amazonaws.com/${EcrRepositoryName}:latest
         Essential: true
         PortMappings:
         - HostPort: 5000
