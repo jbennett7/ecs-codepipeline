@@ -64,7 +64,7 @@ Resources:
   EcrRepository:
     Type: AWS::ECR::Repository
     Properties:
-      GitRepositoryName: !Ref ApplicationName
+      RepositoryName: !Ref ApplicationName
 
   CodeBuildServiceRole:
     Type: AWS::IAM::Role
