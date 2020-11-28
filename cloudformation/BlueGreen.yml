@@ -4,6 +4,10 @@ Parameters:
     Description: Name of the Application
     Type: String
 
+  GitRepositoryName:
+    Description: Name of the Git repository
+    Type: String
+
   Region:
     Description: Region
     Type: String
