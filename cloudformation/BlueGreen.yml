@@ -90,20 +90,20 @@ Resources:
           Statement:
           - Effect: Allow
             Resource:
-            - !Sub arn:aws:logs:${Region}:${AccountId}:log-group:/aws/codebuild/${ApplicationName}
-            - !Sub arn:aws:logs:${Region}:${AccountId}:log-group:/aws/codebuild/${ApplicationName}:*
+            - !Sub arn:aws:logs:${Region}:${AWS::AccountId}:log-group:/aws/codebuild/${ApplicationName}
+            - !Sub arn:aws:logs:${Region}:${AWS::AccountId}:log-group:/aws/codebuild/${ApplicationName}:*
             Action:
             - logs:CreateLogGroup
             - logs:CreateLogStream
             - logs:PutLogEvents
           - Effect: Allow
             Resource:
-            - !Sub arn:aws:codecommit:${Region}:${AccountId}:${GitRepositoryName}
+            - !Sub arn:aws:codecommit:${Region}:${AWS::AccountId}:${GitRepositoryName}
             Action:
             - codecommit:GitPull
           - Effect: Allow
             Resource:
-            - !Sub arn:aws:codebuild:${Region}:${AccountId}:report-group/${ApplicationName}-*
+            - !Sub arn:aws:codebuild:${Region}:${AWS::AccountId}:report-group/${ApplicationName}-*
             Action:
             - codebuild:CreateReportGroup
             - codebuild:CreateReport
@@ -146,7 +146,7 @@ Resources:
         - Name: AWS_DEFAULT_REGION
           Value: !Ref Region
         - Name: AWS_ACCOUNT_ID
-          Value: !Ref AccountId
+          Value: !Ref AWS::AccountId
         - Name: IMAGE_REPO_NAME
           Value: !Ref ApplicationName
         - Name: IMAGE_TAG
