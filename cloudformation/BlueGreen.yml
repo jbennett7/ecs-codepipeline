@@ -16,7 +16,7 @@ Parameters:
   AccountId:
     Description: The account id
     Type: String
-    Default: !Ref AccountId
+    Default: !Ref AWS::AccountId
 
   VpcCidr:
     Description: The IP range (CIDR notation) for this VPC.
