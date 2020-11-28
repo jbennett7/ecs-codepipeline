@@ -4,7 +4,7 @@ Parameters:
     Description: Name of the Application
     Type: String
 
-  RepositoryName:
+  GitRepositoryName:
     Description: Name of the build repository.
     Type: String
 
@@ -69,7 +69,7 @@ Resources:
   EcrRepository:
     Type: AWS::ECR::Repository
     Properties:
-      RepositoryName: !Ref ApplicationName
+      GitRepositoryName: !Ref ApplicationName
 
   CodeBuildServiceRole:
     Type: AWS::IAM::Role
@@ -98,7 +98,7 @@ Resources:
             - logs:PutLogEvents
           - Effect: Allow
             Resource:
-            - !Sub arn:aws:codecommit:${Region}:${AccountId}:${RepositoryName}
+            - !Sub arn:aws:codecommit:${Region}:${AccountId}:${GitRepositoryName}
             Action:
             - codecommit:GitPull
           - Effect: Allow
@@ -153,7 +153,7 @@ Resources:
           Value: latest
       Source:
         Type: CODECOMMIT
-        Location: !Sub https://git-codecommit.${Region}.amazonaws.com/v1/repos/${RepositoryName}
+        Location: !Sub https://git-codecommit.${Region}.amazonaws.com/v1/repos/${GitRepositoryName}
 
   Vpc:
     Type: AWS::EC2::VPC
