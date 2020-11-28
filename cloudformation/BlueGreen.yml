@@ -8,6 +8,10 @@ Parameters:
     Description: Name of the build repository.
     Type: String
 
+  EcrRepositoryName:
+    Description: Name of the ECR Repository.
+    Type: String
+
   Region:
     Description: Region
     Type: String
@@ -64,12 +68,7 @@ Resources:
   EcrRepository:
     Type: AWS::ECR::Repository
     Properties:
-      RepositoryName:
-        Fn::Transform:
-        - Name: String
-          Parameters:
-            InputString: !Ref ApplicationName
-            Operation: Lower
+      RepositoryName: !Ref EcrRepositoryName
 
   CodeBuildServiceRole:
     Type: AWS::IAM::Role

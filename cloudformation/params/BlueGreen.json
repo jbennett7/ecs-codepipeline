@@ -6,5 +6,9 @@
   {
     "ParameterKey": "GitRepositoryName",
     "ParameterValue": "GoHello"
+  },
+  {
+    "ParameterKey": "EcrRepositoryName",
+    "ParameterValue": "goapplication"
   }
 ]
