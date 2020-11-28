@@ -64,7 +64,12 @@ Resources:
   EcrRepository:
     Type: AWS::ECR::Repository
     Properties:
-      RepositoryName: !Ref ApplicationName
+      RepositoryName:
+        Fn::Transform:
+        - Name: String
+          Parameters:
+            InputString: !Ref ApplicationName
+            Operation: Lower
 
   CodeBuildServiceRole:
     Type: AWS::IAM::Role
