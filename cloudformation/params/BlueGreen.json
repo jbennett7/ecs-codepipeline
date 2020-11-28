@@ -1,14 +1,10 @@
 [
   {
     "ParameterKey": "ApplicationName",
-    "ParameterValue": "GoApplication"
+    "ParameterValue": "goapplication"
   },
   {
     "ParameterKey": "GitRepositoryName",
     "ParameterValue": "GoHello"
-  },
-  {
-    "ParameterKey": "EcrRepositoryName",
-    "ParameterValue": "goapplication"
   }
 ]
