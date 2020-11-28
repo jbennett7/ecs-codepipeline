@@ -13,11 +13,6 @@ Parameters:
     Type: String
     Default: us-east-1
 
-  AccountId:
-    Description: The account id
-    Type: String
-    Default: !Ref AWS::AccountId
-
   VpcCidr:
     Description: The IP range (CIDR notation) for this VPC.
     Type: String
