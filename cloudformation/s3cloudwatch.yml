@@ -42,4 +42,6 @@ Resources:
           - !GetAtt S3Bucket.Arn
         IncludeManagementEvents: false
         ReadWriteType: All
+      IsLogging: false
+      IsMultiRegionTrail: false
       
