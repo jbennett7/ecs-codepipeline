@@ -2,6 +2,6 @@
 [
   {
     "ParameterKey": "S3BucketName",
-    "ParameterValue": "S3BucketJBNewYork"
+    "ParameterValue": "s3bucketjbnewyork"
   }
 ]

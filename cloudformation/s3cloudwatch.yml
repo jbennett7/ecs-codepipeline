@@ -5,7 +5,6 @@ Parameters:
   S3BucketName:
     Type: String
     Description: S3 Bucket Name.
-    Default: s3bucketjbnewyork
 
 Resources:
 
