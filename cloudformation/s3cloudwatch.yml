@@ -30,3 +30,16 @@ Resources:
         Value: StandardStorage
       - Name: BucketName
         Value: !Ref S3BucketName
+
+  CloudTrailS3Trail:
+    Type: AWS::CloudTrail::Trail
+    Properties:
+      TrailName: S3NewYork
+      EventSelectors:
+      - DataResources:
+        - Type: AWS::S3::Object
+          Values:
+          - !GetAtt S3Bucket.Arn
+        IncludeManagementEvents: false
+        ReadWriteType: All
+      
