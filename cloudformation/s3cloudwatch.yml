@@ -24,7 +24,7 @@ Resources:
       MetricName: BucketSizeBytes
       Namespace: AWS/S3
       Period: 60
-      Threshold: 1000
+      Threshold: 100000
       Dimensions:
       - Name: StorageType
         Value: StandardStorage
@@ -44,4 +44,4 @@ Resources:
         ReadWriteType: All
       IsLogging: false
       IsMultiRegionTrail: false
-      
+      S3BucketName: !Ref S3Bucket
