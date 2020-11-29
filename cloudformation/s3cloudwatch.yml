@@ -19,7 +19,7 @@ Resources:
     Properties:
       AlarmDescription: S3 Bucket Alarm.
       AlarmName: S3BucketAlarm
-      ComparisonOperator: GreaterThanOrEqualToTHreshold
+      ComparisonOperator: GreaterThanOrEqualToThreshold
       EvaluationPeriods: 3
       Statistic: Minimum
       MetricName: BucketSizeBytes
