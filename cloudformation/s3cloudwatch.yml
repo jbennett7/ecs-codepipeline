@@ -1,0 +1,33 @@
+---
+Description: Amazon CloudWatch Alarm on an Amazon S3 Bucket.
+
+Parameters:
+  S3BucketName:
+    Type: String
+    Description: S3 Bucket Name.
+    Default: s3bucketjbnewyork
+
+Resources:
+
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref S3BucketName
+
+  CloudWatchS3Alarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: S3 Bucket Alarm.
+      AlarmName: S3BucketAlarm
+      ComparisonOperator: GreaterThanOrEqualToTHreshold
+      EvaluationPeriods: 3
+      Statistic: Minimum
+      MetricName: BucketSizeBytes
+      Namespace: AWS/S3
+      Period: 60
+      Threshold: 1000
+      Dimensions:
+      - Name: StorageType
+        Value: StandardStorage
+      - Name: BucketName
+        Value: !Ref S3BucketName
