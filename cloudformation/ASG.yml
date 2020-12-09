@@ -2,13 +2,13 @@
 Description: CI/CD Environment
 
 Parameters:
-#  EnvironmentName:
-#    Description: An environment name that is prefixed to resources.
-#    Type: String
-#
-#  ApplicationName:
-#    Description: Application Name
-#    Type: String
+  EnvironmentName:
+    Description: An environment name that is prefixed to resources.
+    Type: String
+
+  ApplicationName:
+    Description: Application Name
+    Type: String
 #
 #  VpcCIDR:
 #    Description: The IP range (CIDR notation) for this VPC.
@@ -29,11 +29,11 @@ Parameters:
 #    Description: IP range for the third subnet.
 #    Type: String
 #    Default: 10.0.2.0/24
-#
-#  AmiImageId:
-#    Description: EC2 Instance AMI Image.
-#    Type: String
-#
+
+  AmiImageId:
+    Description: EC2 Instance AMI Image.
+    Type: String
+
 #  InstanceKey:
 #    Type: String
 
