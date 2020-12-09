@@ -645,13 +645,13 @@ Resources:
 #            DeploymentGroupName: !Ref CodeDeployGroup
 #          RunOrder: 1
 
-#Outputs:
-#   Foobar:
-#     Value:
-#       Fn::Transform:
-#       - Name: ToLower
-#         Parameters:
-#           String: "HelloThereHowAreYou"
+Outputs:
+   Foobar:
+     Value:
+       Fn::Transform:
+       - Name: ToLower
+         Parameters:
+           String: "HelloThereHowAreYou"
 
 #  CodeDeployerRole:
 #    Description: The Arn of the CodeDeployer Role.
