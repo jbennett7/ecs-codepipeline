@@ -75,7 +75,7 @@ Resources:
               "status": "success"
             }
             try:
-              str = event["params"]["InputString"]
+              str = event["params"]["ToLower"]
               response["fragment"] = str.lower()
             except Exception as e:
               traceback.print_exc()
