@@ -645,8 +645,8 @@ Resources:
 #          RunOrder: 1
 
 Outputs:
-   DependsOn: Transform
    Foobar:
+     DependsOn: Transform
      Value:
        Fn::Transform:
        - Name: ToLower
