@@ -41,7 +41,7 @@ Resources:
   ToLowerExecutionRole:
     Type: AWS::IAM::Role
     Properties:
-      AssumePolicyDocument:
+      AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
         - Effect: Allow
