@@ -102,11 +102,17 @@ Resources:
       Description: String transformation to lowercase
       FunctionName: !GetAtt LambdaToLower.Arn
 
-#  Bucket:
-#    Type: AWS::S3::Bucket
-#    Properties:
-#      BucketName: !Sub ${ApplicationName}njbbucket
-#
+  Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName:
+        Fn::Join:
+        - ""
+        - - Fn::Transform:
+            - Name: ToLower
+              Parameters: !Ref ApplicationName
+          - njbennett
+
 #  VPC:
 #    Type: AWS::EC2::VPC
 #    Properties:
@@ -645,13 +651,13 @@ Resources:
 #            DeploymentGroupName: !Ref CodeDeployGroup
 #          RunOrder: 1
 
-Outputs:
-   Foobar:
-     Value:
-       Fn::Transform:
-       - Name: ToLower
-         Parameters:
-           ToLower: "HelloThereHowAreYou"
+#Outputs:
+#   Foobar:
+#     Value:
+#       Fn::Transform:
+#       - Name: ToLower
+#         Parameters:
+#           ToLower: "HelloThereHowAreYou"
 
 #  CodeDeployerRole:
 #    Description: The Arn of the CodeDeployer Role.
