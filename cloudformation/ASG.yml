@@ -95,7 +95,7 @@ Resources:
       FunctionName: !GetAtt LambdaToLower.Arn
       Principal: cloudformation.amazonaws.com
 
-  ToLower:
+  Transform:
     Type: AWS::CloudFormation::Macro
     Properties:
       Name: ToLower
