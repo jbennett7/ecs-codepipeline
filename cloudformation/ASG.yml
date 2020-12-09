@@ -49,7 +49,7 @@ Resources:
             Service:
             - lambda.amazonaws.com
           Action:
-          - sts.AssumeRole
+          - sts:AssumeRole
       Path: /
       Policies:
       - PolicyName: root
