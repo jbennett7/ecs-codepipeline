@@ -1,0 +1,667 @@
+---
+Description: CI/CD Environment
+
+Parameters:
+#  EnvironmentName:
+#    Description: An environment name that is prefixed to resources.
+#    Type: String
+#
+#  ApplicationName:
+#    Description: Application Name
+#    Type: String
+#
+#  VpcCIDR:
+#    Description: The IP range (CIDR notation) for this VPC.
+#    Type: String
+#    Default: 10.0.0.0/16
+#
+#  PublicSubnet1CIDR:
+#    Description: IP range for the first subnet.
+#    Type: String
+#    Default: 10.0.0.0/24
+#
+#  PublicSubnet2CIDR:
+#    Description: IP range for the second subnet.
+#    Type: String
+#    Default: 10.0.1.0/24
+#
+#  PublicSubnet3CIDR:
+#    Description: IP range for the third subnet.
+#    Type: String
+#    Default: 10.0.2.0/24
+#
+#  AmiImageId:
+#    Description: EC2 Instance AMI Image.
+#    Type: String
+#
+#  InstanceKey:
+#    Type: String
+
+Resources:
+  ToLowerExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts.AssumeRole
+      Path: /
+      Policies:
+      - PolicyName: root
+        PolicyDocument:
+          Version: 2012-10-17
+          Statement:
+          - Effect: Allow
+            Action:
+            - logs:*
+            Resource:
+            - arn:aws:logs:*:*:*
+
+  LambdaToLower:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        ZipFile: |
+          import traceback
+
+          def handler(event, context):
+            response = {
+              "requestId": event["requestId"]
+              "status": "success"
+            }
+            try:
+              str = event["params"]["String"]
+              response["fragment"] = str.lower()
+            except Exception as e:
+              traceback.print_exc()
+              response["status"] = "failure"
+              response["errorMessage"] = str(e)
+            return response
+      Description: CloudFormation function to transform strings to lowercase.
+      Handler: index.handler
+      Runtime: python3.7
+      Role: !GetAtt ToLowerExecutionRole.Arn
+      FunctionName: ToLower
+
+  ToLowerPermissions:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt ToLower.Arn
+      Principal: cloudformation.amazonaws.com
+
+  ToLower:
+    Type: AWS::CloudFormation::Macro
+    Properties:
+      Name: ToLower
+      Description: String transformation to lowercase
+      FunctionName: !GetAtt ToLower.Arn
+
+#  Bucket:
+#    Type: AWS::S3::Bucket
+#    Properties:
+#      BucketName: !Sub ${ApplicationName}njbbucket
+#
+#  VPC:
+#    Type: AWS::EC2::VPC
+#    Properties:
+#      CidrBlock: !Ref VpcCIDR
+#      EnableDnsSupport: true
+#      EnableDnsHostnames: true
+#      Tags:
+#      - Key: Name
+#        Value: !Ref EnvironmentName
+#
+#  InternetGateway:
+#    Type: AWS::EC2::InternetGateway
+#    Properties:
+#      Tags:
+#      - Key: Name
+#        Value: !Ref EnvironmentName
+#
+#  InternetGatewayAttachment:
+#    Type: AWS::EC2::VPCGatewayAttachment
+#    Properties:
+#      InternetGatewayId: !Ref InternetGateway
+#      VpcId: !Ref VPC
+#
+#  PublicSubnet1:
+#    Type: AWS::EC2::Subnet
+#    Properties:
+#      VpcId: !Ref VPC
+#      AvailabilityZone:
+#        !Select 
+#        - 0
+#        - !GetAZs ''
+#      CidrBlock: !Ref PublicSubnet1CIDR
+#      MapPublicIpOnLaunch: true
+#      Tags:
+#      - Key: Name
+#        Value: !Sub ${EnvironmentName} Public Subnet (AZ1)
+#
+#  PublicSubnet2:
+#    Type: AWS::EC2::Subnet
+#    Properties:
+#      VpcId: !Ref VPC
+#      AvailabilityZone:
+#        !Select
+#        - 1
+#        - !GetAZs ''
+#      CidrBlock: !Ref PublicSubnet2CIDR
+#      MapPublicIpOnLaunch: true
+#      Tags:
+#      - Key: Name
+#        Value: !Sub ${EnvironmentName} Public Subnet (AZ2)
+#
+#  PublicSubnet3:
+#    Type: AWS::EC2::Subnet
+#    Properties:
+#      VpcId: !Ref VPC
+#      AvailabilityZone:
+#        !Select
+#        - 2
+#        - !GetAZs ''
+#      CidrBlock: !Ref PublicSubnet3CIDR
+#      MapPublicIpOnLaunch: true
+#      Tags:
+#      - Key: Name
+#        Value: !Sub ${EnvironmentName} Public Subnet (AZ3)
+#
+#  PublicRouteTable:
+#    Type: AWS::EC2::RouteTable
+#    Properties:
+#      VpcId: !Ref VPC
+#      Tags:
+#      - Key: Name
+#        Value: !Sub ${EnvironmentName} Public Routes
+#
+#  DefaultPublicRoute:
+#    Type: AWS::EC2::Route
+#    DependsOn: InternetGatewayAttachment
+#    Properties:
+#      RouteTableId: !Ref PublicRouteTable
+#      DestinationCidrBlock: 0.0.0.0/0
+#      GatewayId: !Ref InternetGateway
+#
+#  PublicSubnet1RouteTableAssociation:
+#    Type: AWS::EC2::SubnetRouteTableAssociation
+#    Properties:
+#      RouteTableId: !Ref PublicRouteTable
+#      SubnetId: !Ref PublicSubnet1
+#
+#  PublicSubnet2RouteTableAssociation:
+#    Type: AWS::EC2::SubnetRouteTableAssociation
+#    Properties:
+#      RouteTableId: !Ref PublicRouteTable
+#      SubnetId: !Ref PublicSubnet2
+#
+#  PublicSubnet3RouteTableAssociation:
+#    Type: AWS::EC2::SubnetRouteTableAssociation
+#    Properties:
+#      RouteTableId: !Ref PublicRouteTable
+#      SubnetId: !Ref PublicSubnet3
+#
+#  EC2ApplicationRole:
+#    Type: AWS::IAM::Role
+#    Properties:
+#      AssumeRolePolicyDocument:
+#        Version: 2012-10-17
+#        Statement:
+#        - Effect: Allow
+#          Principal:
+#            Service:
+#            - ec2.amazonaws.com
+#          Action:
+#          - sts:AssumeRole
+#      Path: /
+#      ManagedPolicyArns:
+#      - arn:aws:iam::aws:policy/AWSCodeDeployFullAccess
+#      - arn:aws:iam::aws:policy/AmazonS3FullAccess
+#      RoleName: !Ref ApplicationName
+#      Description: !Ref ApplicationName
+#
+#  EC2ApplicationInstanceProfile:
+#    Type: AWS::IAM::InstanceProfile
+#    Properties:
+#      InstanceProfileName: ec2codedeploy
+#      Path: /
+#      Roles:
+#      - !Ref EC2ApplicationRole
+#
+#  CodeBuildRole:
+#    Type: AWS::IAM::Role
+#    Properties:
+#      AssumeRolePolicyDocument:
+#        Version: 2012-10-17
+#        Statement:
+#        - Effect: Allow
+#          Principal:
+#            Service:
+#            - codebuild.amazonaws.com
+#          Action:
+#          - sts:AssumeRole
+#      Path: /
+#      Policies:
+#      - PolicyName: CodeBuildPolicy
+#        PolicyDocument:
+#          Version: 2012-10-17
+#          Statement:
+#          - Effect: Allow
+#            Resource:
+#            - !Join 
+#              - ":"
+#              - - !Sub "arn:aws:logs:${AWS::Region}"
+#                - !Sub "${AWS::AccountId}"
+#                - !Sub "log-group/aws/codebuild/${ApplicationName}"
+#            - !Join
+#              - ":"
+#              - - !Sub "arn:aws:logs:${AWS::Region}"
+#                - !Sub "${AWS::AccountId}:log-group"
+#                - !Sub "/aws/codebuild/${ApplicationName}:*"
+#            Action:
+#            - logs:CreateLogGroup
+#            - logs:CreateLogStream
+#            - logs:PutLogEvents
+#          - Effect: Allow
+#            Resource:
+#            - !GetAtt Bucket.Arn
+#            - !Sub "${Bucket.Arn}/*"
+#            Action:
+#            - s3:PutObject
+#            - s3:GetObject
+#            - s3:GetObjectVersion
+#            - s3:GetBucketAcl
+#            - s3:GetBucketLocation
+#          - Effect: Allow
+#            Resource:
+#            - !Join 
+#              - ":"
+#              - - !Sub "arn:aws:codecommit:${AWS::Region}"
+#                - !Sub "${AWS::AccountId}:${ApplicationName}"
+#            Action:
+#            - codecommit:GitPull
+#          - Effect: Allow
+#            Resource:
+#            - !GetAtt Bucket.Arn
+#            - !Sub "arn:aws:s3:::${Bucket.Arn}/*"
+#            Action:
+#            - s3:PutObject
+#            - s3:GetBucketAcl
+#            - s3:GetBucketLocation
+#          - Effect: Allow
+#            Resource:
+#            - !Join 
+#              - ":"
+#              - - !Sub "arn:aws:codebuild:${AWS::Region}"
+#                - !Sub "${AWS::AccountId}:report-group/${ApplicationName}-*"
+#            Action:
+#            - codebuild:CreateReportGroup
+#            - codebuild:CreateReport
+#            - codebuild:UpdateReport
+#            - codebuild:BatchPutTestCases
+#            - codebuild:BatchPutTestCases
+#            - codebuild:BatchPutCodeCoverages
+#      RoleName: codebuilder
+#      Description: CodeBuild Service Role
+#
+#  CodeDeployRole:
+#    Type: AWS::IAM::Role
+#    Properties:
+#      AssumeRolePolicyDocument:
+#        Version: 2012-10-17
+#        Statement:
+#        - Effect: Allow
+#          Principal:
+#            Service: 
+#            - codedeploy.amazonaws.com
+#          Action:
+#          - sts:AssumeRole
+#      Path: /
+#      ManagedPolicyArns:
+#      - arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole
+#      RoleName: codedeployer
+#      Description: CodeDeploy Service Role
+#
+#  CodePipelineRole:
+#    Type: AWS::IAM::Role
+#    DependsOn:
+#    - CodeCommit
+#    Properties:
+#      AssumeRolePolicyDocument:
+#        Version: 2012-10-17
+#        Statement:
+#        - Effect: Allow
+#          Principal:
+#            Service:
+#            - codepipeline.amazonaws.com
+#          Action:
+#          - sts:AssumeRole
+#      Policies:
+#      - PolicyName: AccessCodeCommit
+#        PolicyDocument:
+#          Version: 2012-10-17
+#          Statement:
+#          - Effect: Allow
+#            Action:
+#            - codecommit:GetBranch
+#            - codecommit:GetCommit
+#            - codecommit:UploadArchive
+#            - codecommit:GetUploadArchiveStatus
+#            - codecommit:CancelUploadArchive
+#            Resource:
+#            - !GetAtt CodeCommit.Arn
+#          - Effect: Allow
+#            Action:
+#            - codedeploy:CreateDeployment
+#            - codedeploy:GetDeployment
+#            - codedeploy:GetApplication
+#            - codedeploy:GetApplicationRevision
+#            - codedeploy:RegisterApplicationRevision
+#            - codedeploy:GetDeploymentConfig
+#            - ecs:RegisterTaskDefinition
+#            - iam:PassRole
+#            Resource: "*"
+#          - Effect: Allow
+#            Action:
+#            - codebuild:*
+#            Resource: !GetAtt CodeBuild.Arn
+#      ManagedPolicyArns:
+#      - arn:aws:iam::aws:policy/AmazonS3FullAccess
+#      RoleName: codepipelinerole
+#      Description: CodePipeline Role
+#
+#  ELBSecurityGroup:
+#    Type: AWS::EC2::SecurityGroup
+#    Properties:
+#      GroupDescription: ELB security group
+#      GroupName: ELBSG
+#      VpcId:
+#        Fn::ImportValue: !Sub "${VpcStackName}-VpcId"
+#      SecurityGroupIngress:
+#      - CidrIp: 0.0.0.0/0
+#        Description: Port 80
+#        FromPort: 80
+#        ToPort: 80
+#        IpProtocol: tcp
+#      Tags:
+#      - Key: Name
+#        Value: !Ref EnvironmentName
+#
+#  EC2SecurityGroup:
+#    Type: AWS::EC2::SecurityGroup
+#    DependsOn: ELBSecurityGroup
+#    Properties:
+#      GroupDescription: Application security group
+#      GroupName: AppSG
+#      VpcId:
+#        Fn::ImportValue: !Sub "${VpcStackName}-VpcId"
+#      SecurityGroupIngress:
+#      - CidrIp: 0.0.0.0/0
+#        Description: SSH access
+#        FromPort: 22
+#        ToPort: 22
+#        IpProtocol: tcp
+#      - SourceSecurityGroupId: !Ref ELBSecurityGroup
+#        Description: Port 80 Access only by ELB
+#        FromPort: 80
+#        ToPort: 80
+#        IpProtocol: tcp
+#      Tags:
+#      - Key: Name
+#        Value: !Ref EnvironmentName
+#
+#  LaunchTemplate:
+#    Type: AWS::EC2::LaunchTemplate
+#    Properties:
+#      LaunchTemplateName: !Join [ "", [ !Ref ApplicationName, LaunchTemplate ] ]
+#      LaunchTemplateData:
+#        ImageId: !Ref AmiImageId
+#        InstanceType: t2.micro
+#        KeyName: !Ref InstanceKey
+#        SecurityGroupIds:
+#        - !Ref EC2SecurityGroup
+#        IamInstanceProfile:
+#          Arn: !GetAtt EC2ApplicationInstanceProfile.Arn
+#        UserData: !Base64 |
+#          #!/bin/bash
+#          sudo yum update -y
+#          sudo yum install ruby -y
+#          sudo yum install wget -y
+#          cd /tmp
+#          wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install
+#          chmod +x ./install
+#          sudo ./install auto
+#          sudo service codedeploy-agent start
+#          rm install
+#        TagSpecifications:
+#        - ResourceType: instance
+#          Tags:
+#          - Key: Name
+#            Value: !Ref EnvironmentName
+#
+#  TargetGroup:
+#    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+#    Properties:
+#      Name: !Join [ "", [ !Ref ApplicationName, TargetGroup ] ]
+#      TargetType: instance
+#      Protocol: HTTP
+#      Port: 80
+#      HealthCheckPath: /
+#      HealthCheckIntervalSeconds: 10
+#      HealthCheckTimeoutSeconds: 5
+#      HealthyThresholdCount: 5
+#      UnhealthyThresholdCount: 2
+#      Matcher:
+#        HttpCode: '200'
+#      VpcId:
+#        Fn::ImportValue: !Sub "${VpcStackName}-VpcId"
+#
+#  Listener:
+#    Type: AWS::ElasticLoadBalancingV2::Listener
+#    Properties:
+#      DefaultActions:
+#      - Type: forward
+#        TargetGroupArn: !Ref TargetGroup
+#      LoadBalancerArn: !Ref LoadBalancer
+#      Port: 80
+#      Protocol: HTTP
+#
+#  LoadBalancer:
+#    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+#    Properties:
+#      IpAddressType: ipv4
+#      Name: !Join [ "", [ !Ref ApplicationName, ELB ] ]
+#      Scheme: internet-facing
+#      SecurityGroups:
+#      - !Ref ELBSecurityGroup
+#      Subnets: 
+#        Fn::Split: 
+#        - ","
+#        - Fn::ImportValue:
+#            !Sub "${VpcStackName}-SubnetIds"
+#      Tags:
+#      - Key: Name
+#        Value: !Ref EnvironmentName
+#      Type: application
+#
+#
+#  AutoScalingGroup:
+#    Type: AWS::AutoScaling::AutoScalingGroup
+##   CreationPolicy:
+##     ResourceSignal:
+##       Timeout: PT15M
+##       Count: 2
+#    UpdatePolicy:
+#      AutoScalingRollingUpdate:
+#        MaxBatchSize: 1
+#        MinInstancesInService: 1
+#        PauseTime: PT15M
+#        WaitOnResourceSignals: true
+#    Properties:
+#      VPCZoneIdentifier:
+#        Fn::Split:
+#        - ","
+#        - Fn::ImportValue:
+#            !Sub "${VpcStackName}-SubnetIds"
+#      AutoScalingGroupName: !Join [ "", [ !Ref ApplicationName, ASG ] ]
+#      DesiredCapacity: 3
+#      MinSize: 3
+#      MaxSize: 3
+#      HealthCheckType: ELB
+#      HealthCheckGracePeriod: 300
+#      TargetGroupARNs:
+#      - !Ref TargetGroup
+#      LaunchTemplate:
+#        LaunchTemplateId: !Ref LaunchTemplate
+#        Version: !GetAtt LaunchTemplate.LatestVersionNumber
+#
+#  CodeCommit:
+#    Type: AWS::CodeCommit::Repository
+#    Properties:
+#      Code:
+#        S3:
+#          Bucket: !Ref BucketName
+#          Key: !Sub "${ApplicationName}.zip"
+#      RepositoryDescription: !Sub "${ApplicationName}"
+#      RepositoryName: !Sub "${ApplicationName}"
+#
+#  CodeBuild:
+#    Type: AWS::CodeBuild::Project
+#    Properties:
+#      Name: !Ref ApplicationName
+#      Description: !Sub "Build ${ApplicationName}."
+#      Environment:
+#        Image: aws/codebuild/standard:4.0
+#        ComputeType: BUILD_GENERAL1_SMALL
+#        Type: LINUX_CONTAINER
+#      ServiceRole: !GetAtt CodeBuildRole.Arn
+#      Source:
+#        Type: CODEPIPELINE
+#      Artifacts:
+#        Type: CODEPIPELINE
+#
+#  CodeDeploy:
+#    Type: AWS::CodeDeploy::Application
+#    Properties:
+#      ApplicationName:
+#        !Join 
+#        - ""
+#        - - !Ref ApplicationName
+#          - CodeDeploy
+#      ComputePlatform: Server
+#
+#  CodeDeployGroup:
+#    Type: AWS::CodeDeploy::DeploymentGroup
+#    DependsOn:
+#    - AutoScalingGroup
+#    Properties:
+#      ApplicationName:
+#        !Join
+#        - ""
+#        - - !Ref ApplicationName
+#          - CodeDeploy
+#      DeploymentGroupName:
+#        !Join
+#        - ""
+#        - - !Ref ApplicationName
+#          - DeploymentGroup
+#      DeploymentConfigName: CodeDeployDefault.AllAtOnce
+#      DeploymentStyle:
+#        DeploymentOption: WITH_TRAFFIC_CONTROL
+#        DeploymentType: IN_PLACE
+#      ServiceRoleArn: !GetAtt CodeDeployRole.Arn
+#      AutoScalingGroups:
+#      - !Join
+#        - ""
+#        - - !Ref ApplicationName
+#          - ASG
+#      LoadBalancerInfo:
+#        TargetGroupInfoList:
+#        - Name:
+#            !Join
+#            - ""
+#            - - !Ref ApplicationName
+#              - TargetGroup
+#
+#  CodePipeline:
+#    Type: AWS::CodePipeline::Pipeline
+#    Properties:
+#      ArtifactStore:
+#        Location: !Ref BucketName
+#        Type: S3
+#      Name:
+#        !Join
+#        - ""
+#        - - !Ref ApplicationName
+#          - Pipeline
+#      RoleArn: !GetAtt CodePipelineRole.Arn
+#      Stages:
+#      - Name: Source
+#        Actions:
+#        - Name: SourceAction
+#          OutputArtifacts:
+#          - Name: SourceOutput
+#          ActionTypeId:
+#            Category: Source
+#            Owner: AWS
+#            Version: 1
+#            Provider: CodeCommit
+#          Configuration:
+#            RepositoryName: !GetAtt CodeCommit.Name
+#            BranchName: master
+#            PollForSourceChanges: True
+#          RunOrder: 1
+#      - Name: Build
+#        Actions:
+#        - Name: Build
+#          Configuration:
+#            ProjectName: !Ref ApplicationName
+#          InputArtifacts:
+#          - Name: SourceOutput
+#          OutputArtifacts:
+#          - Name: BuildOutput
+#          ActionTypeId:
+#            Category: Build
+#            Owner: AWS
+#            Provider: CodeBuild
+#            Version: 1
+#      - Name: Deploy
+#        Actions:
+#        - Name: DeployAction
+#          InputArtifacts:
+#          - Name: BuildOutput
+#          ActionTypeId:
+#            Category: Deploy
+#            Owner: AWS
+#            Provider: CodeDeploy
+#            Version: 1
+#          Configuration:
+#            ApplicationName: !Ref CodeDeploy
+#            DeploymentGroupName: !Ref CodeDeployGroup
+#          RunOrder: 1
+
+Outputs:
+   Foobar:
+     Value:
+       Fn::ToLower:
+       - Name: ToLower
+         Parameters:
+           String: "HelloThereHowAreYou"
+
+#  CodeDeployerRole:
+#    Description: The Arn of the CodeDeployer Role.
+#    Value: !GetAtt CodeDeployRole.Arn
+#
+#  LoadBalancer:
+#    Description: A reference to the Applicaton's ELB.
+#    Value: !Ref LoadBalancer
+#
+#  DNSName:
+#    Description: The AWS DNS Name.
+#    Value: !GetAtt LoadBalancer.DNSName
+...
