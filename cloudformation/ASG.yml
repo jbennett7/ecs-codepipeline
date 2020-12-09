@@ -71,7 +71,7 @@ Resources:
 
           def handler(event, context):
             response = {
-              "requestId": event["requestId"]
+              "requestId": event["requestId"],
               "status": "success"
             }
             try:
