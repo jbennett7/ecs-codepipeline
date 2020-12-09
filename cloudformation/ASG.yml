@@ -72,6 +72,7 @@ Resources:
           def handler(event, context):
             response["requestId"] = event["requestId"]
             response["status"] = "success"
+            i = 1
             try:
               str = event["params"]["InputString"]
               response["fragment"] = str.lower()
