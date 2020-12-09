@@ -100,7 +100,7 @@ Resources:
     Properties:
       Name: ToLower
       Description: String transformation to lowercase
-      FunctionName: !GetAtt ToLower.Arn
+      FunctionName: !GetAtt LambdaToLower.Arn
 
 #  Bucket:
 #    Type: AWS::S3::Bucket
