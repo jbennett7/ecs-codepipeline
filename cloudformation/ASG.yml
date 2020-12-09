@@ -70,10 +70,8 @@ Resources:
           import traceback
 
           def handler(event, context):
-            response = {
-              "requestId": event["requestId"],
-              "status": "success"
-            }
+            response["requestId"] = event["requestId"]
+            response["status"] = "success"
             try:
               str = event["params"]["InputString"]
               response["fragment"] = str.lower()
