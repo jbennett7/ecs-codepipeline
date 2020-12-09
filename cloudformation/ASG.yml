@@ -646,7 +646,6 @@ Resources:
 
 Outputs:
    Foobar:
-     DependsOn: Transform
      Value:
        Fn::Transform:
        - Name: ToLower
