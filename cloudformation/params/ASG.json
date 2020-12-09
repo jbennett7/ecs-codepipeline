@@ -1,0 +1,14 @@
+[
+  {
+    "ParameterKey": "EnvironmentName",
+    "ParameterValue": "Test"
+  },
+  {
+    "ParameterKey": "ApplicationName",
+    "ParameterValue": "JavaHello"
+  },
+  {
+    "ParameterKey": "AmiImageId",
+    "ParameterValue": "ami-04d29b6f966df1537"
+  }
+]
