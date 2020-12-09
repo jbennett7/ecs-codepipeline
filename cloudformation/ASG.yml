@@ -648,7 +648,7 @@ Resources:
 Outputs:
    Foobar:
      Value:
-       Fn::ToLower:
+       Fn::Transform:
        - Name: ToLower
          Parameters:
            String: "HelloThereHowAreYou"
