@@ -645,7 +645,7 @@ Resources:
 #            DeploymentGroupName: !Ref CodeDeployGroup
 #          RunOrder: 1
 
-Outputs:
+#Outputs:
 #   Foobar:
 #     Value:
 #       Fn::Transform:
