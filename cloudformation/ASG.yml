@@ -39,7 +39,6 @@ Parameters:
 
 Resources:
   Bucket:
-    DependsOn: !Ref Transform
     Type: AWS::S3::Bucket
     Properties:
       BucketName:
