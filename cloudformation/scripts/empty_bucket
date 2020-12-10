@@ -1,0 +1,7 @@
+#!/bin/sh
+bucket_name = $(aws cloudformation describe-stack-resources \
+    --stack-name ${1} \
+    --query 'StackResources[?LogicalResourceId == `Bucket`].PhysicalResourceId' \
+    --output text)
+
+aws s3 rm s3://${bucket_name} --recursive
