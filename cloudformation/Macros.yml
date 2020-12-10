@@ -33,15 +33,7 @@ Resources:
               - - arn:aws:logs
                 - !Sub "${AWS::Region}"
                 - !Sub "${AWS::AccountId}"
-                - log-group
-                - /aws/lambda/ToLower
-            - !Join
-              - ":"
-              - - arn:aws:logs
-                - !Sub "${AWS::Region}"
-                - !Sub "${AWS::AccountId}"
-                - log-stream
-                - /aws/lambda/ToLower
+                - /aws/lambda/ToLower:*
 
   LambdaToLower:
     Type: AWS::Lambda::Function
