@@ -1,5 +1,5 @@
 #!/bin/sh
-bucket_name = $(aws cloudformation describe-stack-resources \
+bucket_name=$(aws cloudformation describe-stack-resources \
     --stack-name ${1} \
     --query 'StackResources[?LogicalResourceId == `Bucket`].PhysicalResourceId' \
     --output text)
