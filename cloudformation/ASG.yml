@@ -47,6 +47,75 @@ Resources:
       - Key: Environment
         Value: !Ref EnvironmentName
 
+  LambdaCleanUpBucketRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: /
+      Policies:
+      - PolicyName: root
+        PolicyDocument:
+          Version: 2012-10-17
+          Statement:
+          - Effect: Allow
+            Action:
+            - logs:PutLogEvents
+            - logs:DescribeLogGroups
+            - logs:DescribeLogStreams
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            Resource:
+            - !Join
+              - ":"
+              - - arn:aws:logs
+                - !Sub "${AWS::Region}"
+                - !Sub "${AWS::AccountId}"
+                - log-group
+                - /aws/lambda/CleanUpBucket
+
+  LambdaCleanUpBucket:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        ZipFile: |
+          import traceback
+          def handler(event, context):
+            bucket = event['ResourceProperties']['BucketName']
+            response = {
+              "requestId": event["requestId"],
+              "status": "success"
+            }
+            try:
+              s3 = boto3.resource('s3')
+              s3bucket = s3.Bucket(bucket)
+              for obj in bucket.objects.filter():
+                s3.Object(bucket.name, obj.key).delete()
+            except Exception as e:
+              traceback.print_exc()
+              response["status"] = "failure"
+              response["errorMessage"] = str(e)
+            return response
+      Description: CloudFormation function to delete objects in bucket.
+      Handler: index.handler
+      Runtime: python3.7
+      Role: !GetAtt  LambdaCleanUpBucket.Arn
+      FunctionName: CleanUpBucket
+
+  CleanupBucketOnDelete:
+    DependsOn: !Ref LambdaCleanUpBucket
+    Type: Custom::CleanUpBucket
+    Properties:
+      ServiceToken: !Ref CleanUp.Arn
+      BucketName: !Ref Bucket
+
   Vpc:
     Type: AWS::EC2::VPC
     Properties:
