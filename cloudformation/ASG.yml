@@ -587,13 +587,6 @@ Resources:
 #          RunOrder: 1
 
 #Outputs:
-#   Foobar:
-#     Value:
-#       Fn::Transform:
-#       - Name: ToLower
-#         Parameters:
-#           ToLower: "HelloThereHowAreYou"
-
 #  CodeDeployerRole:
 #    Description: The Arn of the CodeDeployer Role.
 #    Value: !GetAtt CodeDeployRole.Arn
