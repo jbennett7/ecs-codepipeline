@@ -180,88 +180,92 @@ Resources:
       Roles:
       - !Ref EC2ApplicationRole
 
-#  CodeBuildRole:
-#    Type: AWS::IAM::Role
-#    Properties:
-#      AssumeRolePolicyDocument:
-#        Version: 2012-10-17
-#        Statement:
-#        - Effect: Allow
-#          Principal:
-#            Service:
-#            - codebuild.amazonaws.com
-#          Action:
-#          - sts:AssumeRole
-#      Path: /
-#      Policies:
-#      - PolicyName: CodeBuildPolicy
-#        PolicyDocument:
-#          Version: 2012-10-17
-#          Statement:
-#          - Effect: Allow
-#            Resource:
-#            - !Join 
-#              - ":"
-#              - - arn:aws:logs
-#                - !Sub ${AWS::Region}
-#                - !Sub ${AWS::AccountId}
-#                - !Sub log-group/aws/codebuild/${ApplicationName}
-#            - !Join
-#              - ":"
-#              - - arn:aws:logs
-#                - !Sub ${AWS::Region}
-#                - !Sub ${AWS::AccountId}
-#                - !Sub log-group/aws/codebuild/${ApplicationName}:*
-#            Action:
-#            - logs:CreateLogGroup
-#            - logs:CreateLogStream
-#            - logs:PutLogEvents
-#          - Effect: Allow
-#            Resource:
-#            - !GetAtt Bucket.Arn
-#            - !Sub ${Bucket.Arn}/*
-#            Action:
-#            - s3:PutObject
-#            - s3:GetObject
-#            - s3:GetObjectVersion
-#            - s3:GetBucketAcl
-#            - s3:GetBucketLocation
-#          - Effect: Allow
-#            Resource:
-#            - !Join 
-#              - ":"
-#              - - arn:aws:codecommit
-#                - !Sub ${AWS::Region}
-#                - !Sub ${AWS::AccountId}
-#                - !Sub ${ApplicationName}
-#            Action:
-#            - codecommit:GitPull
-#          - Effect: Allow
-#            Resource:
-#            - !GetAtt Bucket.Arn
-#            - !Sub arn:aws:s3:::${Bucket.Arn}/*
-#            Action:
-#            - s3:PutObject
-#            - s3:GetBucketAcl
-#            - s3:GetBucketLocation
-#          - Effect: Allow
-#            Resource:
-#            - !Join 
-#              - ":"
-#              - - !Sub arn:aws:codebuild
-#                - !Sub ${AWS::Region}
-#                - !Sub ${AWS::AccountId}
-#                - !Sub report-group/${ApplicationName}-*
-#            Action:
-#            - codebuild:CreateReportGroup
-#            - codebuild:CreateReport
-#            - codebuild:UpdateReport
-#            - codebuild:BatchPutTestCases
-#            - codebuild:BatchPutTestCases
-#            - codebuild:BatchPutCodeCoverages
-#      RoleName: codebuilder
-#      Description: CodeBuild Service Role
-#
+  CodeBuildRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - codebuild.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: /
+      Policies:
+      - PolicyName: CodeBuildPolicy
+        PolicyDocument:
+          Version: 2012-10-17
+          Statement:
+          - Effect: Allow
+            Resource:
+            - !Join 
+              - ":"
+              - - arn:aws:logs
+                - !Sub ${AWS::Region}
+                - !Sub ${AWS::AccountId}
+                - !Sub log-group/aws/codebuild/${ApplicationName}
+            - !Join
+              - ":"
+              - - arn:aws:logs
+                - !Sub ${AWS::Region}
+                - !Sub ${AWS::AccountId}
+                - !Sub log-group/aws/codebuild/${ApplicationName}:*
+            Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+          - Effect: Allow
+            Resource:
+            - !GetAtt Bucket.Arn
+            - !Sub ${Bucket.Arn}/*
+            Action:
+            - s3:PutObject
+            - s3:GetObject
+            - s3:GetObjectVersion
+            - s3:GetBucketAcl
+            - s3:GetBucketLocation
+          - Effect: Allow
+            Resource:
+            - !Join 
+              - ":"
+              - - arn:aws:codecommit
+                - !Sub ${AWS::Region}
+                - !Sub ${AWS::AccountId}
+                - !Sub ${ApplicationName}
+            Action:
+            - codecommit:GitPull
+          - Effect: Allow
+            Resource:
+            - !Join 
+              - ""
+              - - "arn:aws:s3:::"
+                - !Transform
+                  - Name: ToLower
+                    Parameters:
+                      ToLower: !Ref ApplicationName
+                - /*
+            Action:
+            - s3:PutObject
+            - s3:GetBucketAcl
+            - s3:GetBucketLocation
+          - Effect: Allow
+            Resource:
+            - !Join 
+              - ":"
+              - - !Sub arn:aws:codebuild
+                - !Sub ${AWS::Region}
+                - !Sub ${AWS::AccountId}
+                - !Sub report-group/${ApplicationName}-*
+            Action:
+            - codebuild:CreateReportGroup
+            - codebuild:CreateReport
+            - codebuild:UpdateReport
+            - codebuild:BatchPutTestCases
+            - codebuild:BatchPutTestCases
+            - codebuild:BatchPutCodeCoverages
+
 #  CodeDeployRole:
 #    Type: AWS::IAM::Role
 #    Properties:
