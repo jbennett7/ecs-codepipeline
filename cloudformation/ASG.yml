@@ -34,8 +34,12 @@ Parameters:
     Description: EC2 Instance AMI Image.
     Type: String
 
-#  InstanceKey:
-#    Type: String
+  RepositoryName:
+    Description: CodeCommit repository name for the application.
+    Type: String
+
+  InstanceKey:
+    Type: String
 
 Resources:
   Bucket:
@@ -468,16 +472,6 @@ Resources:
 #      LaunchTemplate:
 #        LaunchTemplateId: !Ref LaunchTemplate
 #        Version: !GetAtt LaunchTemplate.LatestVersionNumber
-#
-#  CodeCommit:
-#    Type: AWS::CodeCommit::Repository
-#    Properties:
-#      Code:
-#        S3:
-#          Bucket: !Ref BucketName
-#          Key: !Sub "${ApplicationName}.zip"
-#      RepositoryDescription: !Sub "${ApplicationName}"
-#      RepositoryName: !Sub "${ApplicationName}"
 #
 #  CodeBuild:
 #    Type: AWS::CodeBuild::Project
