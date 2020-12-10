@@ -24,7 +24,13 @@ Resources:
             Action:
             - logs:*
             Resource:
-            - arn:aws:logs:*:*:*
+            - !Join:
+              - ":"
+              - - arn:aws:logs
+                - !Sub "${AWS::Region}"
+                - !Sub "${AWS::AccountId}"
+                - log-group
+                - /aws/lambda/ToLower:*
 
   LambdaToLower:
     Type: AWS::Lambda::Function
