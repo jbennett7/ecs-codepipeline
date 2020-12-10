@@ -33,6 +33,7 @@ Resources:
               - - arn:aws:logs
                 - !Sub "${AWS::Region}"
                 - !Sub "${AWS::AccountId}"
+                - log-group
                 - /aws/lambda/ToLower:*
 
   LambdaToLower:
