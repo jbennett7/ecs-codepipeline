@@ -37,6 +37,14 @@ Parameters:
   InstanceKey:
     Type: String
 
+  Ec2Port:
+    Type: String
+    Default: 80
+
+  ElbPort:
+    Type: String
+    Default: 80
+
 Resources:
   Bucket:
     Type: AWS::S3::Bucket
@@ -146,11 +154,13 @@ Resources:
       SubnetId: !Ref PublicSubnet2
 
   PublicSubnet3RouteTableAssociation:
+  DeletionPolicy: Retain
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       RouteTableId: !Ref PublicRouteTable
       SubnetId: !Ref PublicSubnet3
 
+## TODO: Need to refine policies.
 #  EC2ApplicationRole:
 #    Type: AWS::IAM::Role
 #    Properties:
@@ -336,9 +346,9 @@ Resources:
       VpcId: !Ref Vpc
       SecurityGroupIngress:
       - CidrIp: 0.0.0.0/0
-        Description: Port 80
-        FromPort: 80
-        ToPort: 80
+        Description: !Sub "ELB Port ${ElbPort}"
+        FromPort: !Ref ElbPort
+        ToPort: !Ref ElbPort
         IpProtocol: tcp
       Tags:
       - Key: Name
@@ -358,9 +368,9 @@ Resources:
         ToPort: 22
         IpProtocol: tcp
       - SourceSecurityGroupId: !Ref ELBSecurityGroup
-        Description: Port 80 Access only by ELB
-        FromPort: 80
-        ToPort: 80
+        Description: !Sub "Port ${Ec2Port} Access only by ELB"
+        FromPort: !Ref Ec2Port
+        ToPort: !Ref Ec2Port
         IpProtocol: tcp
       Tags:
       - Key: Name
