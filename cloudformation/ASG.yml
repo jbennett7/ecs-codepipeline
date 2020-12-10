@@ -241,7 +241,7 @@ Resources:
             - !Join 
               - ""
               - - "arn:aws:s3:::"
-                - !Transform
+                - Fn::Transform:
                   - Name: ToLower
                     Parameters:
                       ToLower: !Ref ApplicationName
