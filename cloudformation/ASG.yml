@@ -34,10 +34,6 @@ Parameters:
     Description: EC2 Instance AMI Image.
     Type: String
 
-  RepositoryName:
-    Description: CodeCommit repository name for the application.
-    Type: String
-
   InstanceKey:
     Type: String
 
@@ -45,14 +41,11 @@ Resources:
   Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName:
-        Fn::Join:
-        - ""
-        - - Fn::Transform:
-            - Name: ToLower
-              Parameters:
-                ToLower: !Ref ApplicationName
-          - njbennett
+      Tags:
+      - Key: Application
+        Value: !Ref ApplicationName
+      - Key: Environment
+        Value: !Ref EnvironmentName
 
   Vpc:
     Type: AWS::EC2::VPC
@@ -61,14 +54,18 @@ Resources:
       EnableDnsSupport: true
       EnableDnsHostnames: true
       Tags:
-      - Key: Name
+      - Key: Application
+        Value: !Ref ApplicationName
+      - Key: Environment
         Value: !Ref EnvironmentName
 
   InternetGateway:
     Type: AWS::EC2::InternetGateway
     Properties:
       Tags:
-      - Key: Name
+      - Key: Application
+        Value: !Ref ApplicationName
+      - Key: Environment
         Value: !Ref EnvironmentName
 
   InternetGatewayAttachment:
@@ -153,119 +150,116 @@ Resources:
       RouteTableId: !Ref PublicRouteTable
       SubnetId: !Ref PublicSubnet3
 
-  EC2ApplicationRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: 2012-10-17
-        Statement:
-        - Effect: Allow
-          Principal:
-            Service:
-            - ec2.amazonaws.com
-          Action:
-          - sts:AssumeRole
-      Path: /
-      ManagedPolicyArns:
-      - arn:aws:iam::aws:policy/AWSCodeDeployFullAccess
-      - arn:aws:iam::aws:policy/AmazonS3FullAccess
-      RoleName: !Ref ApplicationName
-      Description: !Ref ApplicationName
-
-  EC2ApplicationInstanceProfile:
-    Type: AWS::IAM::InstanceProfile
-    Properties:
-      InstanceProfileName: ec2codedeploy
-      Path: /
-      Roles:
-      - !Ref EC2ApplicationRole
-
-  CodeBuildRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: 2012-10-17
-        Statement:
-        - Effect: Allow
-          Principal:
-            Service:
-            - codebuild.amazonaws.com
-          Action:
-          - sts:AssumeRole
-      Path: /
-      Policies:
-      - PolicyName: CodeBuildPolicy
-        PolicyDocument:
-          Version: 2012-10-17
-          Statement:
-          - Effect: Allow
-            Resource:
-            - !Join 
-              - ":"
-              - - arn:aws:logs
-                - !Sub ${AWS::Region}
-                - !Sub ${AWS::AccountId}
-                - !Sub log-group/aws/codebuild/${ApplicationName}
-            - !Join
-              - ":"
-              - - arn:aws:logs
-                - !Sub ${AWS::Region}
-                - !Sub ${AWS::AccountId}
-                - !Sub log-group/aws/codebuild/${ApplicationName}:*
-            Action:
-            - logs:CreateLogGroup
-            - logs:CreateLogStream
-            - logs:PutLogEvents
-          - Effect: Allow
-            Resource:
-            - !GetAtt Bucket.Arn
-            - !Sub ${Bucket.Arn}/*
-            Action:
-            - s3:PutObject
-            - s3:GetObject
-            - s3:GetObjectVersion
-            - s3:GetBucketAcl
-            - s3:GetBucketLocation
-          - Effect: Allow
-            Resource:
-            - !Join 
-              - ":"
-              - - arn:aws:codecommit
-                - !Sub ${AWS::Region}
-                - !Sub ${AWS::AccountId}
-                - !Sub ${ApplicationName}
-            Action:
-            - codecommit:GitPull
-          - Effect: Allow
-            Resource:
-            - !Join 
-              - ""
-              - - "arn:aws:s3:::"
-                - Fn::Transform:
-                  - Name: ToLower
-                    Parameters:
-                      ToLower: !Ref ApplicationName
-                - /*
-            Action:
-            - s3:PutObject
-            - s3:GetBucketAcl
-            - s3:GetBucketLocation
-          - Effect: Allow
-            Resource:
-            - !Join 
-              - ":"
-              - - !Sub arn:aws:codebuild
-                - !Sub ${AWS::Region}
-                - !Sub ${AWS::AccountId}
-                - !Sub report-group/${ApplicationName}-*
-            Action:
-            - codebuild:CreateReportGroup
-            - codebuild:CreateReport
-            - codebuild:UpdateReport
-            - codebuild:BatchPutTestCases
-            - codebuild:BatchPutTestCases
-            - codebuild:BatchPutCodeCoverages
-
+#  EC2ApplicationRole:
+#    Type: AWS::IAM::Role
+#    Properties:
+#      AssumeRolePolicyDocument:
+#        Version: 2012-10-17
+#        Statement:
+#        - Effect: Allow
+#          Principal:
+#            Service:
+#            - ec2.amazonaws.com
+#          Action:
+#          - sts:AssumeRole
+#      Path: /
+#      ManagedPolicyArns:
+#      - arn:aws:iam::aws:policy/AWSCodeDeployFullAccess
+#      - arn:aws:iam::aws:policy/AmazonS3FullAccess
+#
+#  EC2ApplicationInstanceProfile:
+#    Type: AWS::IAM::InstanceProfile
+#    Properties:
+#      InstanceProfileName: ec2codedeploy
+#      Path: /
+#      Roles:
+#      - !Ref EC2ApplicationRole
+#
+#  CodeBuildRole:
+#    Type: AWS::IAM::Role
+#    Properties:
+#      AssumeRolePolicyDocument:
+#        Version: 2012-10-17
+#        Statement:
+#        - Effect: Allow
+#          Principal:
+#            Service:
+#            - codebuild.amazonaws.com
+#          Action:
+#          - sts:AssumeRole
+#      Path: /
+#      Policies:
+#      - PolicyName: CodeBuildPolicy
+#        PolicyDocument:
+#          Version: 2012-10-17
+#          Statement:
+#          - Effect: Allow
+#            Resource:
+#            - !Join 
+#              - ":"
+#              - - arn:aws:logs
+#                - !Sub ${AWS::Region}
+#                - !Sub ${AWS::AccountId}
+#                - !Sub log-group/aws/codebuild/${ApplicationName}
+#            - !Join
+#              - ":"
+#              - - arn:aws:logs
+#                - !Sub ${AWS::Region}
+#                - !Sub ${AWS::AccountId}
+#                - !Sub log-group/aws/codebuild/${ApplicationName}:*
+#            Action:
+#            - logs:CreateLogGroup
+#            - logs:CreateLogStream
+#            - logs:PutLogEvents
+#          - Effect: Allow
+#            Resource:
+#            - !GetAtt Bucket.Arn
+#            - !Sub ${Bucket.Arn}/*
+#            Action:
+#            - s3:PutObject
+#            - s3:GetObject
+#            - s3:GetObjectVersion
+#            - s3:GetBucketAcl
+#            - s3:GetBucketLocation
+#          - Effect: Allow
+#            Resource:
+#            - !Join 
+#              - ":"
+#              - - arn:aws:codecommit
+#                - !Sub ${AWS::Region}
+#                - !Sub ${AWS::AccountId}
+#                - Fn::Transform:
+#                  - Name: ToLower
+#                    Parameters:
+#                      ToLower: !Ref ApplicationName
+#            Action:
+#            - codecommit:GitPull
+#          - Effect: Allow
+#            Resource:
+#            - !Join 
+#              - ""
+#              - - !GetAtt Bucket.Arn
+#                - /*
+#            Action:
+#            - s3:PutObject
+#            - s3:GetBucketAcl
+#            - s3:GetBucketLocation
+#          - Effect: Allow
+#            Resource:
+#            - !Join 
+#              - ":"
+#              - - !Sub arn:aws:codebuild
+#                - !Sub ${AWS::Region}
+#                - !Sub ${AWS::AccountId}
+#                - !Sub report-group/${ApplicationName}-*
+#            Action:
+#            - codebuild:CreateReportGroup
+#            - codebuild:CreateReport
+#            - codebuild:UpdateReport
+#            - codebuild:BatchPutTestCases
+#            - codebuild:BatchPutTestCases
+#            - codebuild:BatchPutCodeCoverages
+#
 #  CodeDeployRole:
 #    Type: AWS::IAM::Role
 #    Properties:
@@ -281,8 +275,6 @@ Resources:
 #      Path: /
 #      ManagedPolicyArns:
 #      - arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole
-#      RoleName: codedeployer
-#      Description: CodeDeploy Service Role
 #
 #  CodePipelineRole:
 #    Type: AWS::IAM::Role
@@ -334,8 +326,6 @@ Resources:
 #            Resource: !GetAtt CodeBuild.Arn
 #      ManagedPolicyArns:
 #      - arn:aws:iam::aws:policy/AmazonS3FullAccess
-#      RoleName: codepipelinerole
-#      Description: CodePipeline Role
 
   ELBSecurityGroup:
     Type: AWS::EC2::SecurityGroup
