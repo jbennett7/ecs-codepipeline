@@ -24,7 +24,7 @@ Resources:
             Action:
             - logs:*
             Resource:
-            - !Join:
+            - !Join
               - ":"
               - - arn:aws:logs
                 - !Sub "${AWS::Region}"
