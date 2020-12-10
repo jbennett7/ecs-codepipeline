@@ -430,7 +430,6 @@ Resources:
 #        Value: !Ref EnvironmentName
 #      Type: application
 #
-#
 #  AutoScalingGroup:
 #    Type: AWS::AutoScaling::AutoScalingGroup
 ##   CreationPolicy:
