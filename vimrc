@@ -23,7 +23,7 @@ function Cf_utils()
   let l:cmd = "cd cloudformation;aws cloudformation create-stack"
   let l:cmd = l:cmd . " --stack-name Utilities"
   let l:cmd = l:cmd . " --template-body file://Macros.yml"
-  let l:cmd = l:cmd . " --capabilities IAM_CAPABILITIES"
+  let l:cmd = l:cmd . " --capabilities CAPABILITY_IAM"
   execute s:env . l:cmd . "'"
 endfunction
 command! -nargs=* -complete=command Utils call Cf_utils()
