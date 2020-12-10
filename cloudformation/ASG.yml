@@ -110,7 +110,7 @@ Resources:
       FunctionName: CleanUpBucket
 
   CleanupBucketOnDelete:
-    DependsOn: !Ref LambdaCleanUpBucket
+    DependsOn: LambdaCleanUpBucket
     Type: Custom::CleanUpBucket
     Properties:
       ServiceToken: !Ref CleanUp.Arn
