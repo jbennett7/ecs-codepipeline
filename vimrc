@@ -64,3 +64,4 @@ function EmptyBucket(stack_name)
   let l:cmd = "cd cloudformation;bash scripts/empty_bucket"
   execute s:env . l:cmd . a:stack_name . "'"
 endfunction
+command! -nargs=+ -complete=command EmptyBucket call EmptyBucket(<q-args>)
