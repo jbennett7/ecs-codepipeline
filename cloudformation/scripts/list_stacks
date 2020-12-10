@@ -7,4 +7,5 @@ aws cloudformation list-stacks \
       StackStatus == 'CREATE_IN_PROGRESS' ||
       StackStatus == 'DELETE_IN_PROGRESS' ||
       StackStatus == 'UPDATE_IN_PROGRESS' ||
+      StackStatus == 'ROLLBACK_IN_PROGRESS' ||
       StackStatus == 'ROLLBACK_COMPLETE')]"
