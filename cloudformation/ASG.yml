@@ -345,7 +345,7 @@ Resources:
       VpcId: !Ref Vpc
       SecurityGroupIngress:
       - CidrIp: 0.0.0.0/0
-        Description: !Sub "ELB Port ${ElbPort}"
+        Description: !Sub ELB Port ${ElbPort}
         FromPort: !Ref ElbPort
         ToPort: !Ref ElbPort
         IpProtocol: tcp
@@ -367,7 +367,7 @@ Resources:
         ToPort: 22
         IpProtocol: tcp
       - SourceSecurityGroupId: !Ref ELBSecurityGroup
-        Description: !Sub "Port ${Ec2Port} Access only by ELB"
+        Description: !Sub Port ${Ec2Port} Access only by ELB
         FromPort: !Ref Ec2Port
         ToPort: !Ref Ec2Port
         IpProtocol: tcp
