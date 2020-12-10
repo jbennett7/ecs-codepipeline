@@ -1,0 +1,67 @@
+---
+Description: Utility Macros
+
+Resources:
+  ToLowerExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: /
+      Policies:
+      - PolicyName: root
+        PolicyDocument:
+          Version: 2012-10-17
+          Statement:
+          - Effect: Allow
+            Action:
+            - logs:*
+            Resource:
+            - arn:aws:logs:*:*:*
+
+  LambdaToLower:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        ZipFile: |
+          import traceback
+          def handler(event, context):
+            response = {
+              "requestId": event["requestId"],
+              "status": "success"
+            }
+            try:
+              str = event["params"]["ToLower"]
+              response["fragment"] = str.lower()
+            except Exception as e:
+              traceback.print_exc()
+              response["status"] = "failure"
+              response["errorMessage"] = str(e)
+            return response
+      Description: CloudFormation function to transform strings to lowercase.
+      Handler: index.handler
+      Runtime: python3.7
+      Role: !GetAtt ToLowerExecutionRole.Arn
+      FunctionName: ToLower
+
+  ToLowerPermissions:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt LambdaToLower.Arn
+      Principal: cloudformation.amazonaws.com
+
+  Transform:
+    Type: AWS::CloudFormation::Macro
+    Properties:
+      Name: ToLower
+      Description: String transformation to lowercase
+      FunctionName: !GetAtt LambdaToLower.Arn
+
