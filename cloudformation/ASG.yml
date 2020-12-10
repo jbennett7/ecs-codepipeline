@@ -175,149 +175,149 @@ Resources:
       Path: /
       Roles:
       - !Ref EC2ApplicationRole
-#
-#  CodeBuildRole:
-#    Type: AWS::IAM::Role
-#    Properties:
-#      AssumeRolePolicyDocument:
-#        Version: 2012-10-17
-#        Statement:
-#        - Effect: Allow
-#          Principal:
-#            Service:
-#            - codebuild.amazonaws.com
-#          Action:
-#          - sts:AssumeRole
-#      Path: /
-#      Policies:
-#      - PolicyName: CodeBuildPolicy
-#        PolicyDocument:
-#          Version: 2012-10-17
-#          Statement:
-#          - Effect: Allow
-#            Resource:
-#            - !Join 
-#              - ":"
-#              - - !Sub "arn:aws:logs:${AWS::Region}"
-#                - !Sub "${AWS::AccountId}"
-#                - !Sub "log-group/aws/codebuild/${ApplicationName}"
-#            - !Join
-#              - ":"
-#              - - !Sub "arn:aws:logs:${AWS::Region}"
-#                - !Sub "${AWS::AccountId}:log-group"
-#                - !Sub "/aws/codebuild/${ApplicationName}:*"
-#            Action:
-#            - logs:CreateLogGroup
-#            - logs:CreateLogStream
-#            - logs:PutLogEvents
-#          - Effect: Allow
-#            Resource:
-#            - !GetAtt Bucket.Arn
-#            - !Sub "${Bucket.Arn}/*"
-#            Action:
-#            - s3:PutObject
-#            - s3:GetObject
-#            - s3:GetObjectVersion
-#            - s3:GetBucketAcl
-#            - s3:GetBucketLocation
-#          - Effect: Allow
-#            Resource:
-#            - !Join 
-#              - ":"
-#              - - !Sub "arn:aws:codecommit:${AWS::Region}"
-#                - !Sub "${AWS::AccountId}:${ApplicationName}"
-#            Action:
-#            - codecommit:GitPull
-#          - Effect: Allow
-#            Resource:
-#            - !GetAtt Bucket.Arn
-#            - !Sub "arn:aws:s3:::${Bucket.Arn}/*"
-#            Action:
-#            - s3:PutObject
-#            - s3:GetBucketAcl
-#            - s3:GetBucketLocation
-#          - Effect: Allow
-#            Resource:
-#            - !Join 
-#              - ":"
-#              - - !Sub "arn:aws:codebuild:${AWS::Region}"
-#                - !Sub "${AWS::AccountId}:report-group/${ApplicationName}-*"
-#            Action:
-#            - codebuild:CreateReportGroup
-#            - codebuild:CreateReport
-#            - codebuild:UpdateReport
-#            - codebuild:BatchPutTestCases
-#            - codebuild:BatchPutTestCases
-#            - codebuild:BatchPutCodeCoverages
-#      RoleName: codebuilder
-#      Description: CodeBuild Service Role
-#
-#  CodeDeployRole:
-#    Type: AWS::IAM::Role
-#    Properties:
-#      AssumeRolePolicyDocument:
-#        Version: 2012-10-17
-#        Statement:
-#        - Effect: Allow
-#          Principal:
-#            Service: 
-#            - codedeploy.amazonaws.com
-#          Action:
-#          - sts:AssumeRole
-#      Path: /
-#      ManagedPolicyArns:
-#      - arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole
-#      RoleName: codedeployer
-#      Description: CodeDeploy Service Role
-#
-#  CodePipelineRole:
-#    Type: AWS::IAM::Role
-#    DependsOn:
-#    - CodeCommit
-#    Properties:
-#      AssumeRolePolicyDocument:
-#        Version: 2012-10-17
-#        Statement:
-#        - Effect: Allow
-#          Principal:
-#            Service:
-#            - codepipeline.amazonaws.com
-#          Action:
-#          - sts:AssumeRole
-#      Policies:
-#      - PolicyName: AccessCodeCommit
-#        PolicyDocument:
-#          Version: 2012-10-17
-#          Statement:
-#          - Effect: Allow
-#            Action:
-#            - codecommit:GetBranch
-#            - codecommit:GetCommit
-#            - codecommit:UploadArchive
-#            - codecommit:GetUploadArchiveStatus
-#            - codecommit:CancelUploadArchive
-#            Resource:
-#            - !GetAtt CodeCommit.Arn
-#          - Effect: Allow
-#            Action:
-#            - codedeploy:CreateDeployment
-#            - codedeploy:GetDeployment
-#            - codedeploy:GetApplication
-#            - codedeploy:GetApplicationRevision
-#            - codedeploy:RegisterApplicationRevision
-#            - codedeploy:GetDeploymentConfig
-#            - ecs:RegisterTaskDefinition
-#            - iam:PassRole
-#            Resource: "*"
-#          - Effect: Allow
-#            Action:
-#            - codebuild:*
-#            Resource: !GetAtt CodeBuild.Arn
-#      ManagedPolicyArns:
-#      - arn:aws:iam::aws:policy/AmazonS3FullAccess
-#      RoleName: codepipelinerole
-#      Description: CodePipeline Role
-#
+
+  CodeBuildRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - codebuild.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: /
+      Policies:
+      - PolicyName: CodeBuildPolicy
+        PolicyDocument:
+          Version: 2012-10-17
+          Statement:
+          - Effect: Allow
+            Resource:
+            - !Join 
+              - ":"
+              - - !Sub "arn:aws:logs:${AWS::Region}"
+                - !Sub "${AWS::AccountId}"
+                - !Sub "log-group/aws/codebuild/${ApplicationName}"
+            - !Join
+              - ":"
+              - - !Sub "arn:aws:logs:${AWS::Region}"
+                - !Sub "${AWS::AccountId}:log-group"
+                - !Sub "/aws/codebuild/${ApplicationName}:*"
+            Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+          - Effect: Allow
+            Resource:
+            - !GetAtt Bucket.Arn
+            - !Sub "${Bucket.Arn}/*"
+            Action:
+            - s3:PutObject
+            - s3:GetObject
+            - s3:GetObjectVersion
+            - s3:GetBucketAcl
+            - s3:GetBucketLocation
+          - Effect: Allow
+            Resource:
+            - !Join 
+              - ":"
+              - - !Sub "arn:aws:codecommit:${AWS::Region}"
+                - !Sub "${AWS::AccountId}:${ApplicationName}"
+            Action:
+            - codecommit:GitPull
+          - Effect: Allow
+            Resource:
+            - !GetAtt Bucket.Arn
+            - !Sub "arn:aws:s3:::${Bucket.Arn}/*"
+            Action:
+            - s3:PutObject
+            - s3:GetBucketAcl
+            - s3:GetBucketLocation
+          - Effect: Allow
+            Resource:
+            - !Join 
+              - ":"
+              - - !Sub "arn:aws:codebuild:${AWS::Region}"
+                - !Sub "${AWS::AccountId}:report-group/${ApplicationName}-*"
+            Action:
+            - codebuild:CreateReportGroup
+            - codebuild:CreateReport
+            - codebuild:UpdateReport
+            - codebuild:BatchPutTestCases
+            - codebuild:BatchPutTestCases
+            - codebuild:BatchPutCodeCoverages
+      RoleName: codebuilder
+      Description: CodeBuild Service Role
+
+  CodeDeployRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: 
+            - codedeploy.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: /
+      ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole
+      RoleName: codedeployer
+      Description: CodeDeploy Service Role
+
+  CodePipelineRole:
+    Type: AWS::IAM::Role
+    DependsOn:
+    - CodeCommit
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - codepipeline.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Policies:
+      - PolicyName: AccessCodeCommit
+        PolicyDocument:
+          Version: 2012-10-17
+          Statement:
+          - Effect: Allow
+            Action:
+            - codecommit:GetBranch
+            - codecommit:GetCommit
+            - codecommit:UploadArchive
+            - codecommit:GetUploadArchiveStatus
+            - codecommit:CancelUploadArchive
+            Resource:
+            - !GetAtt CodeCommit.Arn
+          - Effect: Allow
+            Action:
+            - codedeploy:CreateDeployment
+            - codedeploy:GetDeployment
+            - codedeploy:GetApplication
+            - codedeploy:GetApplicationRevision
+            - codedeploy:RegisterApplicationRevision
+            - codedeploy:GetDeploymentConfig
+            - ecs:RegisterTaskDefinition
+            - iam:PassRole
+            Resource: "*"
+          - Effect: Allow
+            Action:
+            - codebuild:*
+            Resource: !GetAtt CodeBuild.Arn
+      ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AmazonS3FullAccess
+      RoleName: codepipelinerole
+      Description: CodePipeline Role
+
   ELBSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
