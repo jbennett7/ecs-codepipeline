@@ -86,7 +86,7 @@ Resources:
             Resource:
             - !Join
               - - ""
-                - !GetAtt Bucket.Arn
+              - - !GetAtt Bucket.Arn
                 - /*
 
   LambdaCleanUpBucket:
