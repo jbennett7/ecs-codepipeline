@@ -114,105 +114,105 @@ Resources:
                 ToLower: !Ref ApplicationName
           - njbennett
 
-#  VPC:
-#    Type: AWS::EC2::VPC
-#    Properties:
-#      CidrBlock: !Ref VpcCIDR
-#      EnableDnsSupport: true
-#      EnableDnsHostnames: true
-#      Tags:
-#      - Key: Name
-#        Value: !Ref EnvironmentName
-#
-#  InternetGateway:
-#    Type: AWS::EC2::InternetGateway
-#    Properties:
-#      Tags:
-#      - Key: Name
-#        Value: !Ref EnvironmentName
-#
-#  InternetGatewayAttachment:
-#    Type: AWS::EC2::VPCGatewayAttachment
-#    Properties:
-#      InternetGatewayId: !Ref InternetGateway
-#      VpcId: !Ref VPC
-#
-#  PublicSubnet1:
-#    Type: AWS::EC2::Subnet
-#    Properties:
-#      VpcId: !Ref VPC
-#      AvailabilityZone:
-#        !Select 
-#        - 0
-#        - !GetAZs ''
-#      CidrBlock: !Ref PublicSubnet1CIDR
-#      MapPublicIpOnLaunch: true
-#      Tags:
-#      - Key: Name
-#        Value: !Sub ${EnvironmentName} Public Subnet (AZ1)
-#
-#  PublicSubnet2:
-#    Type: AWS::EC2::Subnet
-#    Properties:
-#      VpcId: !Ref VPC
-#      AvailabilityZone:
-#        !Select
-#        - 1
-#        - !GetAZs ''
-#      CidrBlock: !Ref PublicSubnet2CIDR
-#      MapPublicIpOnLaunch: true
-#      Tags:
-#      - Key: Name
-#        Value: !Sub ${EnvironmentName} Public Subnet (AZ2)
-#
-#  PublicSubnet3:
-#    Type: AWS::EC2::Subnet
-#    Properties:
-#      VpcId: !Ref VPC
-#      AvailabilityZone:
-#        !Select
-#        - 2
-#        - !GetAZs ''
-#      CidrBlock: !Ref PublicSubnet3CIDR
-#      MapPublicIpOnLaunch: true
-#      Tags:
-#      - Key: Name
-#        Value: !Sub ${EnvironmentName} Public Subnet (AZ3)
-#
-#  PublicRouteTable:
-#    Type: AWS::EC2::RouteTable
-#    Properties:
-#      VpcId: !Ref VPC
-#      Tags:
-#      - Key: Name
-#        Value: !Sub ${EnvironmentName} Public Routes
-#
-#  DefaultPublicRoute:
-#    Type: AWS::EC2::Route
-#    DependsOn: InternetGatewayAttachment
-#    Properties:
-#      RouteTableId: !Ref PublicRouteTable
-#      DestinationCidrBlock: 0.0.0.0/0
-#      GatewayId: !Ref InternetGateway
-#
-#  PublicSubnet1RouteTableAssociation:
-#    Type: AWS::EC2::SubnetRouteTableAssociation
-#    Properties:
-#      RouteTableId: !Ref PublicRouteTable
-#      SubnetId: !Ref PublicSubnet1
-#
-#  PublicSubnet2RouteTableAssociation:
-#    Type: AWS::EC2::SubnetRouteTableAssociation
-#    Properties:
-#      RouteTableId: !Ref PublicRouteTable
-#      SubnetId: !Ref PublicSubnet2
-#
-#  PublicSubnet3RouteTableAssociation:
-#    Type: AWS::EC2::SubnetRouteTableAssociation
-#    Properties:
-#      RouteTableId: !Ref PublicRouteTable
-#      SubnetId: !Ref PublicSubnet3
-#
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VpcCIDR
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+      - Key: Name
+        Value: !Ref EnvironmentName
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+      - Key: Name
+        Value: !Ref EnvironmentName
+
+  InternetGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref VPC
+
+  PublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone:
+        !Select 
+        - 0
+        - !GetAZs ''
+      CidrBlock: !Ref PublicSubnet1CIDR
+      MapPublicIpOnLaunch: true
+      Tags:
+      - Key: Name
+        Value: !Sub ${EnvironmentName} Public Subnet (AZ1)
+
+  PublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone:
+        !Select
+        - 1
+        - !GetAZs ''
+      CidrBlock: !Ref PublicSubnet2CIDR
+      MapPublicIpOnLaunch: true
+      Tags:
+      - Key: Name
+        Value: !Sub ${EnvironmentName} Public Subnet (AZ2)
+
+  PublicSubnet3:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone:
+        !Select
+        - 2
+        - !GetAZs ''
+      CidrBlock: !Ref PublicSubnet3CIDR
+      MapPublicIpOnLaunch: true
+      Tags:
+      - Key: Name
+        Value: !Sub ${EnvironmentName} Public Subnet (AZ3)
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+      - Key: Name
+        Value: !Sub ${EnvironmentName} Public Routes
+
+  DefaultPublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  PublicSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet1
+
+  PublicSubnet2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet2
+
+  PublicSubnet3RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet3
+
 #  EC2ApplicationRole:
 #    Type: AWS::IAM::Role
 #    Properties:
