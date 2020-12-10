@@ -499,11 +499,7 @@ Resources:
   CodeDeploy:
     Type: AWS::CodeDeploy::Application
     Properties:
-      ApplicationName:
-        !Join 
-        - ""
-        - - !Ref ApplicationName
-          - CodeDeploy
+      ApplicationName: !Ref ApplicationName
       ComputePlatform: Server
 
   CodeDeployGroup:
@@ -511,33 +507,17 @@ Resources:
     DependsOn:
     - AutoScalingGroup
     Properties:
-      ApplicationName:
-        !Join
-        - ""
-        - - !Ref ApplicationName
-          - CodeDeploy
-      DeploymentGroupName:
-        !Join
-        - ""
-        - - !Ref ApplicationName
-          - DeploymentGroup
+      ApplicationName: !Ref ApplicationName
+      DeploymentGroupName: !Ref ApplicationName
       DeploymentConfigName: CodeDeployDefault.AllAtOnce
       DeploymentStyle:
         DeploymentOption: WITH_TRAFFIC_CONTROL
         DeploymentType: IN_PLACE
       ServiceRoleArn: !GetAtt CodeDeployRole.Arn
-      AutoScalingGroups:
-      - !Join
-        - ""
-        - - !Ref ApplicationName
-          - ASG
+      AutoScalingGroups: !Ref ApplicationName
       LoadBalancerInfo:
         TargetGroupInfoList:
-        - Name:
-            !Join
-            - ""
-            - - !Ref ApplicationName
-              - TargetGroup
+        - Name: !Ref ApplicationName
 
   CodePipeline:
     Type: AWS::CodePipeline::Pipeline
@@ -545,11 +525,7 @@ Resources:
       ArtifactStore:
         Location: !Ref BucketName
         Type: S3
-      Name:
-        !Join
-        - ""
-        - - !Ref ApplicationName
-          - Pipeline
+      Name: !Ref ApplicationName
       RoleArn: !GetAtt CodePipelineRole.Arn
       Stages:
       - Name: Source
