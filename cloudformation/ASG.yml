@@ -86,8 +86,7 @@ Resources:
             Resource:
             - !Join
             - - ""
-              - Fn::GetAtt:
-                  Bucket.Arn
+              - !GetAtt Bucket.Arn
               - /*
 
   LambdaCleanUpBucket:
