@@ -379,198 +379,198 @@ Resources:
       - Key: Name
         Value: !Ref EnvironmentName
 
-#  LaunchTemplate:
-#    Type: AWS::EC2::LaunchTemplate
-#    Properties:
-#      LaunchTemplateName: !Ref ApplicationName
-#      LaunchTemplateData:
-#        ImageId: !Ref AmiImageId
-#        InstanceType: t2.micro
-#        KeyName: !Ref InstanceKey
-#        SecurityGroupIds:
-#        - !Ref EC2SecurityGroup
-#        IamInstanceProfile:
-#          Arn: !GetAtt EC2ApplicationInstanceProfile.Arn
-#        UserData: !Base64 |
-#          #!/bin/bash
-#          yum update -y
-#          yum install ruby -y
-#          yum install wget -y
-#          cd /tmp
-#          wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install
-#          chmod +x ./install
-#          ./install auto
-#          service codedeploy-agent start
-#          rm install
-#        TagSpecifications:
-#        - ResourceType: instance
-#          Tags:
-#          - Key: Name
-#            Value: !Ref EnvironmentName
-#
-#  TargetGroup:
-#    Type: AWS::ElasticLoadBalancingV2::TargetGroup
-#    Properties:
-#      Name: !Ref ApplicationName
-#      TargetType: instance
-#      Protocol: HTTP
-#      Port: !Ref Ec2Port
-#      HealthCheckPath: /
-#      HealthCheckIntervalSeconds: 10
-#      HealthCheckTimeoutSeconds: 5
-#      HealthyThresholdCount: 5
-#      UnhealthyThresholdCount: 2
-#      Matcher:
-#        HttpCode: '200'
-#      VpcId: !Ref Vpc
-#
-#  Listener:
-#    Type: AWS::ElasticLoadBalancingV2::Listener
-#    Properties:
-#      DefaultActions:
-#      - Type: forward
-#        TargetGroupArn: !Ref TargetGroup
-#      LoadBalancerArn: !Ref LoadBalancer
-#      Port: !Ref ElbPort
-#      Protocol: HTTP
-#
-#  LoadBalancer:
-#    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
-#    Properties:
-#      IpAddressType: ipv4
-#      Name: !Ref ApplicationName
-#      Scheme: internet-facing
-#      SecurityGroups:
-#      - !Ref ELBSecurityGroup
-#      Subnets: 
-#      - PublicSubnet1
-#      - PublicSubnet2
-#      - PublicSubnet3
-#      Tags:
-#      - Key: Name
-#        Value: !Ref EnvironmentName
-#      Type: application
-#
-#  AutoScalingGroup:
-#    Type: AWS::AutoScaling::AutoScalingGroup
-##   CreationPolicy:
-##     ResourceSignal:
-##       Timeout: PT15M
-##       Count: 2
-#    UpdatePolicy:
-#      AutoScalingRollingUpdate:
-#        MaxBatchSize: 1
-#        MinInstancesInService: 1
-#        PauseTime: PT15M
-#        WaitOnResourceSignals: true
-#    Properties:
-#      VPCZoneIdentifier:
-#        Fn::Split:
-#        - ","
-#        - Fn::ImportValue:
-#            !Sub "${VpcStackName}-SubnetIds"
-#      AutoScalingGroupName: !Ref ApplicationName
-#      DesiredCapacity: 3
-#      MinSize: 3
-#      MaxSize: 3
-#      HealthCheckType: ELB
-#      HealthCheckGracePeriod: 300
-#      TargetGroupARNs:
-#      - !Ref TargetGroup
-#      LaunchTemplate:
-#        LaunchTemplateId: !Ref LaunchTemplate
-#        Version: !GetAtt LaunchTemplate.LatestVersionNumber
-#
-#  CodeBuild:
-#    Type: AWS::CodeBuild::Project
-#    Properties:
-#      Name: !Ref ApplicationName
-#      Description: !Sub "Build ${ApplicationName}."
-#      Environment:
-#        Image: aws/codebuild/standard:4.0
-#        ComputeType: BUILD_GENERAL1_SMALL
-#        Type: LINUX_CONTAINER
-#      ServiceRole: !GetAtt CodeBuildRole.Arn
-#      Source:
-#        Type: CODEPIPELINE
-#      Artifacts:
-#        Type: CODEPIPELINE
-#
-#  CodeDeploy:
-#    Type: AWS::CodeDeploy::Application
-#    Properties:
-#      ApplicationName: !Ref ApplicationName
-#      ComputePlatform: Server
-#
-#  CodeDeployGroup:
-#    Type: AWS::CodeDeploy::DeploymentGroup
-#    DependsOn:
-#    - AutoScalingGroup
-#    Properties:
-#      ApplicationName: !Ref ApplicationName
-#      DeploymentGroupName: !Ref ApplicationName
-#      DeploymentConfigName: CodeDeployDefault.AllAtOnce
-#      DeploymentStyle:
-#        DeploymentOption: WITH_TRAFFIC_CONTROL
-#        DeploymentType: IN_PLACE
-#      ServiceRoleArn: !GetAtt CodeDeployRole.Arn
-#      AutoScalingGroups: !Ref ApplicationName
-#      LoadBalancerInfo:
-#        TargetGroupInfoList:
-#        - Name: !Ref ApplicationName
-#
-#  CodePipeline:
-#    Type: AWS::CodePipeline::Pipeline
-#    Properties:
-#      ArtifactStore:
-#        Location: !Ref BucketName
-#        Type: S3
-#      Name: !Ref ApplicationName
-#      RoleArn: !GetAtt CodePipelineRole.Arn
-#      Stages:
-#      - Name: Source
-#        Actions:
-#        - Name: SourceAction
-#          OutputArtifacts:
-#          - Name: SourceOutput
-#          ActionTypeId:
-#            Category: Source
-#            Owner: AWS
-#            Version: 1
-#            Provider: CodeCommit
-#          Configuration:
-#            RepositoryName: !Ref ApplicationName
-#            BranchName: master
-#            PollForSourceChanges: True
-#          RunOrder: 1
-#      - Name: Build
-#        Actions:
-#        - Name: Build
-#          Configuration:
-#            ProjectName: !Ref ApplicationName
-#          InputArtifacts:
-#          - Name: SourceOutput
-#          OutputArtifacts:
-#          - Name: BuildOutput
-#          ActionTypeId:
-#            Category: Build
-#            Owner: AWS
-#            Provider: CodeBuild
-#            Version: 1
-#      - Name: Deploy
-#        Actions:
-#        - Name: DeployAction
-#          InputArtifacts:
-#          - Name: BuildOutput
-#          ActionTypeId:
-#            Category: Deploy
-#            Owner: AWS
-#            Provider: CodeDeploy
-#            Version: 1
-#          Configuration:
-#            ApplicationName: !Ref CodeDeploy
-#            DeploymentGroupName: !Ref CodeDeployGroup
-#          RunOrder: 1
+  LaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateName: !Ref ApplicationName
+      LaunchTemplateData:
+        ImageId: !Ref AmiImageId
+        InstanceType: t2.micro
+        KeyName: !Ref InstanceKey
+        SecurityGroupIds:
+        - !Ref EC2SecurityGroup
+        IamInstanceProfile:
+          Arn: !GetAtt EC2ApplicationInstanceProfile.Arn
+        UserData: !Base64 |
+          #!/bin/bash
+          yum update -y
+          yum install ruby -y
+          yum install wget -y
+          cd /tmp
+          wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install
+          chmod +x ./install
+          ./install auto
+          service codedeploy-agent start
+          rm install
+        TagSpecifications:
+        - ResourceType: instance
+          Tags:
+          - Key: Name
+            Value: !Ref EnvironmentName
+
+  TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: !Ref ApplicationName
+      TargetType: instance
+      Protocol: HTTP
+      Port: !Ref Ec2Port
+      HealthCheckPath: /
+      HealthCheckIntervalSeconds: 10
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 5
+      UnhealthyThresholdCount: 2
+      Matcher:
+        HttpCode: '200'
+      VpcId: !Ref Vpc
+
+  Listener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+      - Type: forward
+        TargetGroupArn: !Ref TargetGroup
+      LoadBalancerArn: !Ref LoadBalancer
+      Port: !Ref ElbPort
+      Protocol: HTTP
+
+  LoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      IpAddressType: ipv4
+      Name: !Ref ApplicationName
+      Scheme: internet-facing
+      SecurityGroups:
+      - !Ref ELBSecurityGroup
+      Subnets: 
+      - PublicSubnet1
+      - PublicSubnet2
+      - PublicSubnet3
+      Tags:
+      - Key: Name
+        Value: !Ref EnvironmentName
+      Type: application
+
+  AutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+#   CreationPolicy:
+#     ResourceSignal:
+#       Timeout: PT15M
+#       Count: 2
+    UpdatePolicy:
+      AutoScalingRollingUpdate:
+        MaxBatchSize: 1
+        MinInstancesInService: 1
+        PauseTime: PT15M
+        WaitOnResourceSignals: true
+    Properties:
+      VPCZoneIdentifier:
+        Fn::Split:
+        - ","
+        - Fn::ImportValue:
+            !Sub "${VpcStackName}-SubnetIds"
+      AutoScalingGroupName: !Ref ApplicationName
+      DesiredCapacity: 3
+      MinSize: 3
+      MaxSize: 3
+      HealthCheckType: ELB
+      HealthCheckGracePeriod: 300
+      TargetGroupARNs:
+      - !Ref TargetGroup
+      LaunchTemplate:
+        LaunchTemplateId: !Ref LaunchTemplate
+        Version: !GetAtt LaunchTemplate.LatestVersionNumber
+
+  CodeBuild:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: !Ref ApplicationName
+      Description: !Sub "Build ${ApplicationName}."
+      Environment:
+        Image: aws/codebuild/standard:4.0
+        ComputeType: BUILD_GENERAL1_SMALL
+        Type: LINUX_CONTAINER
+      ServiceRole: !GetAtt CodeBuildRole.Arn
+      Source:
+        Type: CODEPIPELINE
+      Artifacts:
+        Type: CODEPIPELINE
+
+  CodeDeploy:
+    Type: AWS::CodeDeploy::Application
+    Properties:
+      ApplicationName: !Ref ApplicationName
+      ComputePlatform: Server
+
+  CodeDeployGroup:
+    Type: AWS::CodeDeploy::DeploymentGroup
+    DependsOn:
+    - AutoScalingGroup
+    Properties:
+      ApplicationName: !Ref ApplicationName
+      DeploymentGroupName: !Ref ApplicationName
+      DeploymentConfigName: CodeDeployDefault.AllAtOnce
+      DeploymentStyle:
+        DeploymentOption: WITH_TRAFFIC_CONTROL
+        DeploymentType: IN_PLACE
+      ServiceRoleArn: !GetAtt CodeDeployRole.Arn
+      AutoScalingGroups: !Ref ApplicationName
+      LoadBalancerInfo:
+        TargetGroupInfoList:
+        - Name: !Ref ApplicationName
+
+  CodePipeline:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      ArtifactStore:
+        Location: !Ref BucketName
+        Type: S3
+      Name: !Ref ApplicationName
+      RoleArn: !GetAtt CodePipelineRole.Arn
+      Stages:
+      - Name: Source
+        Actions:
+        - Name: SourceAction
+          OutputArtifacts:
+          - Name: SourceOutput
+          ActionTypeId:
+            Category: Source
+            Owner: AWS
+            Version: 1
+            Provider: CodeCommit
+          Configuration:
+            RepositoryName: !Ref ApplicationName
+            BranchName: master
+            PollForSourceChanges: True
+          RunOrder: 1
+      - Name: Build
+        Actions:
+        - Name: Build
+          Configuration:
+            ProjectName: !Ref ApplicationName
+          InputArtifacts:
+          - Name: SourceOutput
+          OutputArtifacts:
+          - Name: BuildOutput
+          ActionTypeId:
+            Category: Build
+            Owner: AWS
+            Provider: CodeBuild
+            Version: 1
+      - Name: Deploy
+        Actions:
+        - Name: DeployAction
+          InputArtifacts:
+          - Name: BuildOutput
+          ActionTypeId:
+            Category: Deploy
+            Owner: AWS
+            Provider: CodeDeploy
+            Version: 1
+          Configuration:
+            ApplicationName: !Ref CodeDeploy
+            DeploymentGroupName: !Ref CodeDeployGroup
+          RunOrder: 1
 
 #Outputs:
 #  CodeDeployerRole:
