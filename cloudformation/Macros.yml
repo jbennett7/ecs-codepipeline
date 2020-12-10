@@ -22,7 +22,8 @@ Resources:
           Statement:
           - Effect: Allow
             Action:
-            - logs:*
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
             Resource:
             - !Join
               - ":"
