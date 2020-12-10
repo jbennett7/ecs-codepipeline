@@ -14,5 +14,9 @@
   {
     "ParameterKey": "InstanceKey",
     "ParameterValue": "foobar"
+  },
+  {
+    "ParameterKey": "RepositoryName",
+    "ParameterValue": "foobar"
   }
 ]

@@ -312,7 +312,7 @@ Resources:
 #                - arn:aws:codecommit
 #                - !Sub ${AWS::Region}
 #                - !Sub ${AWS::AccountId}
-#                - !Sub ${Repository}
+#                - !Sub ${RepositoryName}
 #          - Effect: Allow
 #            Action:
 #            - codedeploy:CreateDeployment
