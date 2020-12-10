@@ -80,6 +80,15 @@ Resources:
                 - !Sub "${AWS::AccountId}"
                 - log-group
                 - /aws/lambda/CleanUpBucket
+          - Effect: Allow
+            Action:
+            - s3:DeleteObject
+            Resource:
+            - !Join
+            - - ""
+              - Fn::GetAtt:
+                  Bucket.Arn
+              - /*
 
   LambdaCleanUpBucket:
     Type: AWS::Lambda::Function
