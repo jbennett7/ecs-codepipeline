@@ -48,7 +48,7 @@ Resources:
       BucketName:
         Fn::Join:
         - ""
-        - - Fn::Transform:
+        - - !Transform
             - Name: ToLower
               Parameters:
                 ToLower: !Ref ApplicationName
