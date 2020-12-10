@@ -10,5 +10,9 @@
   {
     "ParameterKey": "AmiImageId",
     "ParameterValue": "ami-04d29b6f966df1537"
+  },
+  {
+    "ParameterKey": "InstanceKey",
+    "ParameterValue": "foobar"
   }
 ]
