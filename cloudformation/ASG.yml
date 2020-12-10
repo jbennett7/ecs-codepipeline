@@ -113,7 +113,7 @@ Resources:
     DependsOn: LambdaCleanUpBucket
     Type: Custom::CleanUpBucket
     Properties:
-      ServiceToken: !Ref CleanUp.Arn
+      ServiceToken: !GetAtt LambdaCleanUpBucket.Arn
       BucketName: !Ref Bucket
 
   Vpc:
