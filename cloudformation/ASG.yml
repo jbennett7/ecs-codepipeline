@@ -318,7 +318,7 @@ Resources:
             - codecommit:CancelUploadArchive
             Resource:
             - !Join
-              - - ":"
+              - ":"
               - - arn:aws:codecommit
                 - !Sub ${AWS::Region}
                 - !Sub ${AWS::AccountId}
