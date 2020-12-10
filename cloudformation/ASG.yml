@@ -198,14 +198,16 @@ Resources:
 #            Resource:
 #            - !Join 
 #              - ":"
-#              - - !Sub "arn:aws:logs:${AWS::Region}"
-#                - !Sub "${AWS::AccountId}"
-#                - !Sub "log-group/aws/codebuild/${ApplicationName}"
+#              - - arn:aws:logs
+#                - !Sub ${AWS::Region}
+#                - !Sub ${AWS::AccountId}
+#                - !Sub log-group/aws/codebuild/${ApplicationName}
 #            - !Join
 #              - ":"
-#              - - !Sub "arn:aws:logs:${AWS::Region}"
-#                - !Sub "${AWS::AccountId}:log-group"
-#                - !Sub "/aws/codebuild/${ApplicationName}:*"
+#              - - arn:aws:logs
+#                - !Sub ${AWS::Region}
+#                - !Sub ${AWS::AccountId}
+#                - !Sub log-group/aws/codebuild/${ApplicationName}:*
 #            Action:
 #            - logs:CreateLogGroup
 #            - logs:CreateLogStream
@@ -213,7 +215,7 @@ Resources:
 #          - Effect: Allow
 #            Resource:
 #            - !GetAtt Bucket.Arn
-#            - !Sub "${Bucket.Arn}/*"
+#            - !Sub ${Bucket.Arn}/*
 #            Action:
 #            - s3:PutObject
 #            - s3:GetObject
@@ -224,14 +226,16 @@ Resources:
 #            Resource:
 #            - !Join 
 #              - ":"
-#              - - !Sub "arn:aws:codecommit:${AWS::Region}"
-#                - !Sub "${AWS::AccountId}:${ApplicationName}"
+#              - - arn:aws:codecommit
+#                - !Sub ${AWS::Region}
+#                - !Sub ${AWS::AccountId}
+#                - !Sub ${ApplicationName}
 #            Action:
 #            - codecommit:GitPull
 #          - Effect: Allow
 #            Resource:
 #            - !GetAtt Bucket.Arn
-#            - !Sub "arn:aws:s3:::${Bucket.Arn}/*"
+#            - !Sub arn:aws:s3:::${Bucket.Arn}/*
 #            Action:
 #            - s3:PutObject
 #            - s3:GetBucketAcl
@@ -240,8 +244,10 @@ Resources:
 #            Resource:
 #            - !Join 
 #              - ":"
-#              - - !Sub "arn:aws:codebuild:${AWS::Region}"
-#                - !Sub "${AWS::AccountId}:report-group/${ApplicationName}-*"
+#              - - !Sub arn:aws:codebuild
+#                - !Sub ${AWS::Region}
+#                - !Sub ${AWS::AccountId}
+#                - !Sub report-group/${ApplicationName}-*
 #            Action:
 #            - codebuild:CreateReportGroup
 #            - codebuild:CreateReport
@@ -297,7 +303,12 @@ Resources:
 #            - codecommit:GetUploadArchiveStatus
 #            - codecommit:CancelUploadArchive
 #            Resource:
-#            - !GetAtt CodeCommit.Arn
+#            - !Join
+#              - - ":"
+#                - arn:aws:codecommit
+#                - !Sub ${AWS::Region}
+#                - !Sub ${AWS::AccountId}
+#                - !Sub ${Repository}
 #          - Effect: Allow
 #            Action:
 #            - codedeploy:CreateDeployment
@@ -359,7 +370,7 @@ Resources:
 #  LaunchTemplate:
 #    Type: AWS::EC2::LaunchTemplate
 #    Properties:
-#      LaunchTemplateName: !Join [ "", [ !Ref ApplicationName, LaunchTemplate ] ]
+#      LaunchTemplateName: !Ref ApplicationName
 #      LaunchTemplateData:
 #        ImageId: !Ref AmiImageId
 #        InstanceType: t2.micro
@@ -388,7 +399,7 @@ Resources:
 #  TargetGroup:
 #    Type: AWS::ElasticLoadBalancingV2::TargetGroup
 #    Properties:
-#      Name: !Join [ "", [ !Ref ApplicationName, TargetGroup ] ]
+#      Name: !Ref ApplicationName
 #      TargetType: instance
 #      Protocol: HTTP
 #      Port: 80
@@ -399,8 +410,7 @@ Resources:
 #      UnhealthyThresholdCount: 2
 #      Matcher:
 #        HttpCode: '200'
-#      VpcId:
-#        Fn::ImportValue: !Sub "${VpcStackName}-VpcId"
+#      VpcId: !Ref Vpc
 #
 #  Listener:
 #    Type: AWS::ElasticLoadBalancingV2::Listener
@@ -416,15 +426,14 @@ Resources:
 #    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
 #    Properties:
 #      IpAddressType: ipv4
-#      Name: !Join [ "", [ !Ref ApplicationName, ELB ] ]
+#      Name: !Ref ApplicationName
 #      Scheme: internet-facing
 #      SecurityGroups:
 #      - !Ref ELBSecurityGroup
 #      Subnets: 
-#        Fn::Split: 
-#        - ","
-#        - Fn::ImportValue:
-#            !Sub "${VpcStackName}-SubnetIds"
+#      - PublicSubnet1
+#      - PublicSubnet2
+#      - PublicSubnet3
 #      Tags:
 #      - Key: Name
 #        Value: !Ref EnvironmentName
@@ -448,7 +457,7 @@ Resources:
 #        - ","
 #        - Fn::ImportValue:
 #            !Sub "${VpcStackName}-SubnetIds"
-#      AutoScalingGroupName: !Join [ "", [ !Ref ApplicationName, ASG ] ]
+#      AutoScalingGroupName: !Ref ApplicationName
 #      DesiredCapacity: 3
 #      MinSize: 3
 #      MaxSize: 3
