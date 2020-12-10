@@ -50,131 +50,131 @@ Resources:
                 ToLower: !Ref ApplicationName
           - njbennett
 
-#  VPC:
-#    Type: AWS::EC2::VPC
-#    Properties:
-#      CidrBlock: !Ref VpcCIDR
-#      EnableDnsSupport: true
-#      EnableDnsHostnames: true
-#      Tags:
-#      - Key: Name
-#        Value: !Ref EnvironmentName
-#
-#  InternetGateway:
-#    Type: AWS::EC2::InternetGateway
-#    Properties:
-#      Tags:
-#      - Key: Name
-#        Value: !Ref EnvironmentName
-#
-#  InternetGatewayAttachment:
-#    Type: AWS::EC2::VPCGatewayAttachment
-#    Properties:
-#      InternetGatewayId: !Ref InternetGateway
-#      VpcId: !Ref VPC
-#
-#  PublicSubnet1:
-#    Type: AWS::EC2::Subnet
-#    Properties:
-#      VpcId: !Ref VPC
-#      AvailabilityZone:
-#        !Select 
-#        - 0
-#        - !GetAZs ''
-#      CidrBlock: !Ref PublicSubnet1CIDR
-#      MapPublicIpOnLaunch: true
-#      Tags:
-#      - Key: Name
-#        Value: !Sub ${EnvironmentName} Public Subnet (AZ1)
-#
-#  PublicSubnet2:
-#    Type: AWS::EC2::Subnet
-#    Properties:
-#      VpcId: !Ref VPC
-#      AvailabilityZone:
-#        !Select
-#        - 1
-#        - !GetAZs ''
-#      CidrBlock: !Ref PublicSubnet2CIDR
-#      MapPublicIpOnLaunch: true
-#      Tags:
-#      - Key: Name
-#        Value: !Sub ${EnvironmentName} Public Subnet (AZ2)
-#
-#  PublicSubnet3:
-#    Type: AWS::EC2::Subnet
-#    Properties:
-#      VpcId: !Ref VPC
-#      AvailabilityZone:
-#        !Select
-#        - 2
-#        - !GetAZs ''
-#      CidrBlock: !Ref PublicSubnet3CIDR
-#      MapPublicIpOnLaunch: true
-#      Tags:
-#      - Key: Name
-#        Value: !Sub ${EnvironmentName} Public Subnet (AZ3)
-#
-#  PublicRouteTable:
-#    Type: AWS::EC2::RouteTable
-#    Properties:
-#      VpcId: !Ref VPC
-#      Tags:
-#      - Key: Name
-#        Value: !Sub ${EnvironmentName} Public Routes
-#
-#  DefaultPublicRoute:
-#    Type: AWS::EC2::Route
-#    DependsOn: InternetGatewayAttachment
-#    Properties:
-#      RouteTableId: !Ref PublicRouteTable
-#      DestinationCidrBlock: 0.0.0.0/0
-#      GatewayId: !Ref InternetGateway
-#
-#  PublicSubnet1RouteTableAssociation:
-#    Type: AWS::EC2::SubnetRouteTableAssociation
-#    Properties:
-#      RouteTableId: !Ref PublicRouteTable
-#      SubnetId: !Ref PublicSubnet1
-#
-#  PublicSubnet2RouteTableAssociation:
-#    Type: AWS::EC2::SubnetRouteTableAssociation
-#    Properties:
-#      RouteTableId: !Ref PublicRouteTable
-#      SubnetId: !Ref PublicSubnet2
-#
-#  PublicSubnet3RouteTableAssociation:
-#    Type: AWS::EC2::SubnetRouteTableAssociation
-#    Properties:
-#      RouteTableId: !Ref PublicRouteTable
-#      SubnetId: !Ref PublicSubnet3
-#
-#  EC2ApplicationRole:
-#    Type: AWS::IAM::Role
-#    Properties:
-#      AssumeRolePolicyDocument:
-#        Version: 2012-10-17
-#        Statement:
-#        - Effect: Allow
-#          Principal:
-#            Service:
-#            - ec2.amazonaws.com
-#          Action:
-#          - sts:AssumeRole
-#      Path: /
-#      ManagedPolicyArns:
-#      - arn:aws:iam::aws:policy/AWSCodeDeployFullAccess
-#      - arn:aws:iam::aws:policy/AmazonS3FullAccess
-#      RoleName: !Ref ApplicationName
-#      Description: !Ref ApplicationName
-#
-#  EC2ApplicationInstanceProfile:
-#    Type: AWS::IAM::InstanceProfile
-#    Properties:
-#      InstanceProfileName: ec2codedeploy
-#      Path: /
-#      Roles:
-#      - !Ref EC2ApplicationRole
+  Vpc:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VpcCIDR
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+      - Key: Name
+        Value: !Ref EnvironmentName
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+      - Key: Name
+        Value: !Ref EnvironmentName
+
+  InternetGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref VPC
+
+  PublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone:
+        !Select 
+        - 0
+        - !GetAZs ''
+      CidrBlock: !Ref PublicSubnet1CIDR
+      MapPublicIpOnLaunch: true
+      Tags:
+      - Key: Name
+        Value: !Sub ${EnvironmentName} Public Subnet (AZ1)
+
+  PublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone:
+        !Select
+        - 1
+        - !GetAZs ''
+      CidrBlock: !Ref PublicSubnet2CIDR
+      MapPublicIpOnLaunch: true
+      Tags:
+      - Key: Name
+        Value: !Sub ${EnvironmentName} Public Subnet (AZ2)
+
+  PublicSubnet3:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone:
+        !Select
+        - 2
+        - !GetAZs ''
+      CidrBlock: !Ref PublicSubnet3CIDR
+      MapPublicIpOnLaunch: true
+      Tags:
+      - Key: Name
+        Value: !Sub ${EnvironmentName} Public Subnet (AZ3)
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+      - Key: Name
+        Value: !Sub ${EnvironmentName} Public Routes
+
+  DefaultPublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  PublicSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet1
+
+  PublicSubnet2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet2
+
+  PublicSubnet3RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet3
+
+  EC2ApplicationRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - ec2.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: /
+      ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AWSCodeDeployFullAccess
+      - arn:aws:iam::aws:policy/AmazonS3FullAccess
+      RoleName: !Ref ApplicationName
+      Description: !Ref ApplicationName
+
+  EC2ApplicationInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      InstanceProfileName: ec2codedeploy
+      Path: /
+      Roles:
+      - !Ref EC2ApplicationRole
 #
 #  CodeBuildRole:
 #    Type: AWS::IAM::Role
@@ -318,46 +318,44 @@ Resources:
 #      RoleName: codepipelinerole
 #      Description: CodePipeline Role
 #
-#  ELBSecurityGroup:
-#    Type: AWS::EC2::SecurityGroup
-#    Properties:
-#      GroupDescription: ELB security group
-#      GroupName: ELBSG
-#      VpcId:
-#        Fn::ImportValue: !Sub "${VpcStackName}-VpcId"
-#      SecurityGroupIngress:
-#      - CidrIp: 0.0.0.0/0
-#        Description: Port 80
-#        FromPort: 80
-#        ToPort: 80
-#        IpProtocol: tcp
-#      Tags:
-#      - Key: Name
-#        Value: !Ref EnvironmentName
-#
-#  EC2SecurityGroup:
-#    Type: AWS::EC2::SecurityGroup
-#    DependsOn: ELBSecurityGroup
-#    Properties:
-#      GroupDescription: Application security group
-#      GroupName: AppSG
-#      VpcId:
-#        Fn::ImportValue: !Sub "${VpcStackName}-VpcId"
-#      SecurityGroupIngress:
-#      - CidrIp: 0.0.0.0/0
-#        Description: SSH access
-#        FromPort: 22
-#        ToPort: 22
-#        IpProtocol: tcp
-#      - SourceSecurityGroupId: !Ref ELBSecurityGroup
-#        Description: Port 80 Access only by ELB
-#        FromPort: 80
-#        ToPort: 80
-#        IpProtocol: tcp
-#      Tags:
-#      - Key: Name
-#        Value: !Ref EnvironmentName
-#
+  ELBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: ELB security group
+      GroupName: ELBSG
+      VpcId: !Ref Vpc
+      SecurityGroupIngress:
+      - CidrIp: 0.0.0.0/0
+        Description: Port 80
+        FromPort: 80
+        ToPort: 80
+        IpProtocol: tcp
+      Tags:
+      - Key: Name
+        Value: !Ref EnvironmentName
+
+  EC2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    DependsOn: ELBSecurityGroup
+    Properties:
+      GroupDescription: Application security group
+      GroupName: AppSG
+      VpcId: !Ref Vpc
+      SecurityGroupIngress:
+      - CidrIp: 0.0.0.0/0
+        Description: SSH access
+        FromPort: 22
+        ToPort: 22
+        IpProtocol: tcp
+      - SourceSecurityGroupId: !Ref ELBSecurityGroup
+        Description: Port 80 Access only by ELB
+        FromPort: 80
+        ToPort: 80
+        IpProtocol: tcp
+      Tags:
+      - Key: Name
+        Value: !Ref EnvironmentName
+
 #  LaunchTemplate:
 #    Type: AWS::EC2::LaunchTemplate
 #    Properties:
