@@ -319,7 +319,7 @@ Resources:
             Resource:
             - !Join
               - - ":"
-                - arn:aws:codecommit
+              - - arn:aws:codecommit
                 - !Sub ${AWS::Region}
                 - !Sub ${AWS::AccountId}
                 - !Sub ${ApplicationName}
