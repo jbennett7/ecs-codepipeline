@@ -154,7 +154,6 @@ Resources:
       SubnetId: !Ref PublicSubnet2
 
   PublicSubnet3RouteTableAssociation:
-  DeletionPolicy: Retain
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       RouteTableId: !Ref PublicRouteTable
