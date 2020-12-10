@@ -19,6 +19,15 @@ function UpdateAll(msg)
 endfunction
 command! -nargs=* -complete=command UpdateAll call UpdateAll(<q-args>)
 
+function Cf_utils()
+  let l:cmd = "cd cloudformation;aws cloudformation create-stack"
+  let l:cmd = l:cmd . " --stack-name Utilities"
+  let l:cmd = l:cmd . " --template-body file://Macros.yml"
+  let l:cmd = l:cmd . " --capabilities IAM_CAPABILITIES"
+  execute s:env . l:cmd . "'"
+endfunction
+command! -nargs=* -complete=command Utils call Cf_utils()
+
 function Cf_create(stack_name)
   let l:cmd = "cd cloudformation;bash scripts/create_stack "
   execute s:env . l:cmd . a:stack_name . "'"
