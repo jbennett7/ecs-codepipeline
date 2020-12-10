@@ -32,7 +32,7 @@ Resources:
                 - !Sub "${AWS::Region}"
                 - !Sub "${AWS::AccountId}"
                 - log-group
-                - /aws/lambda/ToLower:*
+                - /aws/lambda/ToLower
 
   LambdaToLower:
     Type: AWS::Lambda::Function
