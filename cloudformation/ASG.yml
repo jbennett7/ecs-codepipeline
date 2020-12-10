@@ -110,7 +110,8 @@ Resources:
         - ""
         - - Fn::Transform:
             - Name: ToLower
-              Parameters: !Ref ApplicationName
+              Parameters:
+                ToLower: !Ref ApplicationName
           - njbennett
 
 #  VPC:
