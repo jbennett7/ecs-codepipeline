@@ -273,73 +273,73 @@ Resources:
             - codebuild:BatchPutTestCases
             - codebuild:BatchPutTestCases
             - codebuild:BatchPutCodeCoverages
-#
-#  CodeDeployRole:
-#    Type: AWS::IAM::Role
-#    Properties:
-#      AssumeRolePolicyDocument:
-#        Version: 2012-10-17
-#        Statement:
-#        - Effect: Allow
-#          Principal:
-#            Service: 
-#            - codedeploy.amazonaws.com
-#          Action:
-#          - sts:AssumeRole
-#      Path: /
-#      ManagedPolicyArns:
-#      - arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole
-#
-#  CodePipelineRole:
-#    Type: AWS::IAM::Role
-#    DependsOn:
-#    - CodeCommit
-#    Properties:
-#      AssumeRolePolicyDocument:
-#        Version: 2012-10-17
-#        Statement:
-#        - Effect: Allow
-#          Principal:
-#            Service:
-#            - codepipeline.amazonaws.com
-#          Action:
-#          - sts:AssumeRole
-#      Policies:
-#      - PolicyName: AccessCodeCommit
-#        PolicyDocument:
-#          Version: 2012-10-17
-#          Statement:
-#          - Effect: Allow
-#            Action:
-#            - codecommit:GetBranch
-#            - codecommit:GetCommit
-#            - codecommit:UploadArchive
-#            - codecommit:GetUploadArchiveStatus
-#            - codecommit:CancelUploadArchive
-#            Resource:
-#            - !Join
-#              - - ":"
-#              - - arn:aws:codecommit
-#                - !Sub ${AWS::Region}
-#                - !Sub ${AWS::AccountId}
-#                - !Sub ${ApplicationName}
-#          - Effect: Allow
-#            Action:
-#            - codedeploy:CreateDeployment
-#            - codedeploy:GetDeployment
-#            - codedeploy:GetApplication
-#            - codedeploy:GetApplicationRevision
-#            - codedeploy:RegisterApplicationRevision
-#            - codedeploy:GetDeploymentConfig
-#            - ecs:RegisterTaskDefinition
-#            - iam:PassRole
-#            Resource: "*"
-#          - Effect: Allow
-#            Action:
-#            - codebuild:*
-#            Resource: !GetAtt CodeBuild.Arn
-#      ManagedPolicyArns:
-#      - arn:aws:iam::aws:policy/AmazonS3FullAccess
+
+  CodeDeployRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: 
+            - codedeploy.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: /
+      ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole
+
+  CodePipelineRole:
+    Type: AWS::IAM::Role
+    DependsOn:
+    - CodeCommit
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - codepipeline.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Policies:
+      - PolicyName: AccessCodeCommit
+        PolicyDocument:
+          Version: 2012-10-17
+          Statement:
+          - Effect: Allow
+            Action:
+            - codecommit:GetBranch
+            - codecommit:GetCommit
+            - codecommit:UploadArchive
+            - codecommit:GetUploadArchiveStatus
+            - codecommit:CancelUploadArchive
+            Resource:
+            - !Join
+              - - ":"
+              - - arn:aws:codecommit
+                - !Sub ${AWS::Region}
+                - !Sub ${AWS::AccountId}
+                - !Sub ${ApplicationName}
+          - Effect: Allow
+            Action:
+            - codedeploy:CreateDeployment
+            - codedeploy:GetDeployment
+            - codedeploy:GetApplication
+            - codedeploy:GetApplicationRevision
+            - codedeploy:RegisterApplicationRevision
+            - codedeploy:GetDeploymentConfig
+            - ecs:RegisterTaskDefinition
+            - iam:PassRole
+            Resource: "*"
+          - Effect: Allow
+            Action:
+            - codebuild:*
+            Resource: !GetAtt CodeBuild.Arn
+      ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AmazonS3FullAccess
 
   ELBSecurityGroup:
     Type: AWS::EC2::SecurityGroup
