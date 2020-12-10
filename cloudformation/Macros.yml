@@ -23,7 +23,7 @@ Resources:
           - Effect: Allow
             Action:
             - logs:PutLogEvents
-            - logs:DescribeLogGroups
+#           - logs:DescribeLogGroups
             - logs:DescribeLogStreams
             - logs:CreateLogGroup
             - logs:CreateLogStream
