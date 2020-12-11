@@ -220,7 +220,8 @@ Resources:
               - - arn:aws:logs
                 - !Sub ${AWS::Region}
                 - !Sub ${AWS::AccountId}
-                - !Sub log-group:/aws/codebuild/${ApplicationName}:*
+                - !Sub log-group:/aws/codebuild/${ApplicationName}
+                - *
             Action:
             - logs:CreateLogGroup
             - logs:CreateLogStream
