@@ -441,9 +441,9 @@ Resources:
       SecurityGroups:
       - !Ref ELBSecurityGroup
       Subnets: 
-      - PublicSubnet1
-      - PublicSubnet2
-      - PublicSubnet3
+      - !GetAtt PublicSubnet1.Arn
+      - !GetAtt PublicSubnet2.Arn
+      - !GetAtt PublicSubnet3.Arn
       Tags:
       - Key: Name
         Value: !Ref EnvironmentName
@@ -463,9 +463,9 @@ Resources:
         WaitOnResourceSignals: true
     Properties:
       VPCZoneIdentifier:
-      - PublicSubnet1
-      - PublicSubnet2
-      - PublicSubnet3
+      - !GetAtt PublicSubnet1.Arn
+      - !GetAtt PublicSubnet2.Arn
+      - !GetAtt PublicSubnet3.Arn
       AutoScalingGroupName: !Ref ApplicationName
       DesiredCapacity: 3
       MinSize: 3
