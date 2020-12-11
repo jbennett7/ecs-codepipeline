@@ -463,10 +463,9 @@ Resources:
         WaitOnResourceSignals: true
     Properties:
       VPCZoneIdentifier:
-        Fn::Split:
-        - ","
-        - Fn::ImportValue:
-            !Sub "${VpcStackName}-SubnetIds"
+      - PublicSubnet1
+      - PublicSubnet2
+      - PublicSubnet3
       AutoScalingGroupName: !Ref ApplicationName
       DesiredCapacity: 3
       MinSize: 3
