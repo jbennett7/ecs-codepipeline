@@ -521,7 +521,7 @@ Resources:
     Type: AWS::CodePipeline::Pipeline
     Properties:
       ArtifactStore:
-        Location: !Ref BucketName
+        Location: !Ref Bucket
         Type: S3
       Name: !Ref ApplicationName
       RoleArn: !GetAtt CodePipelineRole.Arn
