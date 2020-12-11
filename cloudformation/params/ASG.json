@@ -17,10 +17,10 @@
   },
   {
     "ParameterKey": "Ec2Port",
-    "ParameterValue": "5000"
+    "ParameterValue": "80"
   },
   {
     "ParameterKey": "ElbPort",
-    "ParameterValue": "5000"
+    "ParameterValue": "80"
   }
 ]
