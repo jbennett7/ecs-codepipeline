@@ -14,5 +14,13 @@
   {
     "ParameterKey": "InstanceKey",
     "ParameterValue": "foobar"
+  },
+  {
+    "ParameterKey": "Ec2Port",
+    "ParameterValue": 5000
+  },
+  {
+    "ParameterKey": "ElbPort",
+    "ParameterValue": 5000
   }
 ]
