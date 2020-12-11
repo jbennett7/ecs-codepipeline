@@ -511,7 +511,8 @@ Resources:
         DeploymentOption: WITH_TRAFFIC_CONTROL
         DeploymentType: IN_PLACE
       ServiceRoleArn: !GetAtt CodeDeployRole.Arn
-      AutoScalingGroups: !Ref ApplicationName
+      AutoScalingGroups:
+      - !Ref ApplicationName
       LoadBalancerInfo:
         TargetGroupInfoList:
         - Name: !Ref ApplicationName
