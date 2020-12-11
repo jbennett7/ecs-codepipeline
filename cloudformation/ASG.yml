@@ -292,8 +292,6 @@ Resources:
 
   CodePipelineRole:
     Type: AWS::IAM::Role
-    DependsOn:
-    - CodeCommit
     Properties:
       AssumeRolePolicyDocument:
         Version: 2012-10-17
