@@ -5,7 +5,7 @@
   },
   {
     "ParameterKey": "ApplicationName",
-    "ParameterValue": "GoApp"
+    "ParameterValue": "APetGuru"
   },
   {
     "ParameterKey": "AmiImageId",
