@@ -47,6 +47,7 @@ function Cf_list()
   let l:cmd = "cd cloudformation;bash scripts/list_stacks"
   execute s:env . l:cmd . "'"
 endfunction
+command! -nargs=* -complete=command Cflist call Cf_list()
 
 function Cf_delete(stack_name)
   let l:cmd = "cd cloudformation;bash scripts/delete_stack "
