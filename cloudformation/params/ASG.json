@@ -5,7 +5,7 @@
   },
   {
     "ParameterKey": "ApplicationName",
-    "ParameterValue": "APetGuru"
+    "ParameterValue": "GoApp"
   },
   {
     "ParameterKey": "AmiImageId",
@@ -17,10 +17,10 @@
   },
   {
     "ParameterKey": "Ec2Port",
-    "ParameterValue": "80"
+    "ParameterValue": "5000"
   },
   {
     "ParameterKey": "ElbPort",
-    "ParameterValue": "80"
+    "ParameterValue": "5000"
   }
 ]
